@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей Агафонов](https://up.htmlacademy.ru/javascript/15/user/592167).
-* Наставник: `Неизвестно`.
+* Наставник: `Саша Ивашкин`.
 
 ---
 
