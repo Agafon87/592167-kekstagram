@@ -62,16 +62,21 @@ var getPhotoComments = function () {
 // Функция формирующая объект фото и размещающая его в массиве PHOTO_OTHER_PERSONS
 (function () {
   var arrayIndexPhoto = [];
-  for (var i = 1; i <= AMOUNT_PHOTO; i++) {
-    while (i > 0) {
-      var indexPhoto = getRandomNumber(INDEX_PHOTO_MIN, INDEX_PHOTO_MAX);
-      if (arrayIndexPhoto.indexOf(indexPhoto) === -1) {
-        arrayIndexPhoto.push(indexPhoto);
-        var photoDescription = getPhotoDescription(indexPhoto, getRandomNumber(LIKES_AMOUNT_MIN, LIKES_AMOUNT_MAX), getPhotoComments(), ARRAY_DESCRIPTIONS[getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)]);
-        PHOTO_OTHER_PERSONS.push(photoDescription);
-        break;
-      }
+  var amountLikesPhoto = getRandomNumber(LIKES_AMOUNT_MIN, LIKES_AMOUNT_MAX);
+  var descriptionPhoto = ARRAY_DESCRIPTIONS[getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
+  var infinity = 1;
+  while (infinity) {
+    if (arrayIndexPhoto.length >= INDEX_PHOTO_MAX) {
+      break;
     }
+    var indexPhoto = getRandomNumber(INDEX_PHOTO_MIN, INDEX_PHOTO_MAX);
+    if (arrayIndexPhoto.indexOf(indexPhoto) === -1) {
+      arrayIndexPhoto.push(indexPhoto);
+    }
+  }
+  for (var i = 0; i < arrayIndexPhoto.length; i++) {
+    var photoDescription = getPhotoDescription(arrayIndexPhoto[i], amountLikesPhoto, getPhotoComments(), descriptionPhoto);
+    PHOTO_OTHER_PERSONS.push(photoDescription);
   }
 })();
 
