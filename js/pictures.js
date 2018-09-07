@@ -64,8 +64,7 @@ var getPhotoComments = function () {
   var arrayIndexPhoto = [];
   var amountLikesPhoto = getRandomNumber(LIKES_AMOUNT_MIN, LIKES_AMOUNT_MAX);
   var descriptionPhoto = ARRAY_DESCRIPTIONS[getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
-  var infinity = 1;
-  while (infinity) {
+  for (;;) {
     if (arrayIndexPhoto.length >= INDEX_PHOTO_MAX) {
       break;
     }
