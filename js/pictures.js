@@ -62,8 +62,6 @@ var getPhotoComments = function () {
 // Функция формирующая объект фото и размещающая его в массиве PHOTO_OTHER_PERSONS
 (function () {
   var arrayIndexPhoto = [];
-  var amountLikesPhoto = getRandomNumber(LIKES_AMOUNT_MIN, LIKES_AMOUNT_MAX);
-  var descriptionPhoto = ARRAY_DESCRIPTIONS[getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
   for (;;) {
     if (arrayIndexPhoto.length >= INDEX_PHOTO_MAX) {
       break;
@@ -74,6 +72,8 @@ var getPhotoComments = function () {
     }
   }
   for (var i = 0; i < arrayIndexPhoto.length; i++) {
+    var amountLikesPhoto = getRandomNumber(LIKES_AMOUNT_MIN, LIKES_AMOUNT_MAX);
+    var descriptionPhoto = ARRAY_DESCRIPTIONS[getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
     var photoDescription = getPhotoDescription(arrayIndexPhoto[i], amountLikesPhoto, getPhotoComments(), descriptionPhoto);
     PHOTO_OTHER_PERSONS.push(photoDescription);
   }
@@ -109,7 +109,6 @@ photoListElement.appendChild(fragment);
 
 // Задание 4 Показываем элемент big-picture
 var bigPicture = document.querySelector('.big-picture');
-bigPicture.classList.remove('hidden');
 bigPicture.querySelector('img[alt="Девушка в купальнике"]').src = PHOTO_OTHER_PERSONS[0].url;
 bigPicture.querySelector('.likes-count').textContent = PHOTO_OTHER_PERSONS[0].likes;
 bigPicture.querySelector('.comments-count').textContent = PHOTO_OTHER_PERSONS[0].comments.length;
@@ -140,3 +139,137 @@ bigPicture.querySelector('.social__caption').textContent = PHOTO_OTHER_PERSONS[0
 // Задание 5 Прячет блоки счетчиков комментариев и загрузки новых комментариев
 bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
 bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
+
+var uploadFile = document.querySelector('.img-upload__input');
+var changeForm = document.querySelector('.img-upload__overlay');
+var imgUploadPreview = document.querySelector('.img-upload__preview');
+
+// Функция обработчик нажатия клавиши Esc
+var escClickHandler = function (evt) {
+  if (evt.keyCode === 27) {
+    closePopupChangeForm();
+  }
+};
+
+
+// Функция открывающая окно редактирования фото
+var openPopupChangeForm = function () {
+  changeForm.classList.remove('hidden');
+  document.addEventListener('keydown', escClickHandler);
+};
+
+
+// Функция закрывающая popup окно редактирования фото
+var closePopupChangeForm = function () {
+  changeForm.classList.add('hidden');
+  document.removeEventListener('keydown', escClickHandler);
+  uploadFile.value = '';
+};
+
+
+uploadFile.addEventListener('change', function () {
+  openPopupChangeForm();
+});
+
+
+var uploadCancel = document.querySelector('#upload-cancel');
+uploadCancel.addEventListener('click', function () {
+  closePopupChangeForm();
+});
+
+// Функция сброса эффектов с картинки
+var resetUploadPreviewEffects = function () {
+  imgUploadPreview.className = 'img-upload__preview';
+};
+
+
+// Обработчик нажатия на радиобатон effect-none
+var radioEffectNone = document.querySelector('#effect-none');
+radioEffectNone.addEventListener('click', function () {
+  resetUploadPreviewEffects();
+});
+
+
+// Обработчик нажатия на радиобатон Chrome
+var radioEffectChrome = document.querySelector('#effect-chrome');
+radioEffectChrome.addEventListener('click', function () {
+  resetUploadPreviewEffects();
+  imgUploadPreview.classList.add('effects__preview--chrome');
+});
+
+
+// Обработчик нажатия на радиобатон Sepia
+var radioEffectSepia = document.querySelector('#effect-sepia');
+radioEffectSepia.addEventListener('click', function () {
+  resetUploadPreviewEffects();
+  imgUploadPreview.classList.add('effects__preview--sepia');
+});
+
+
+// Обработчик нажатия на радиобатон Marvin
+var radioEffectMarvin = document.querySelector('#effect-marvin');
+radioEffectMarvin.addEventListener('click', function () {
+  resetUploadPreviewEffects();
+  imgUploadPreview.classList.add('effects__preview--marvin');
+});
+
+
+// Обработчик нажатия на радиобатон Phobos
+var radioEffectPhobos = document.querySelector('#effect-phobos');
+radioEffectPhobos.addEventListener('click', function () {
+  resetUploadPreviewEffects();
+  imgUploadPreview.classList.add('effects__preview--phobos');
+});
+
+
+// Обработчик нажатия на радиобатон Heat
+var radioEffectHeat = document.querySelector('#effect-heat');
+radioEffectHeat.addEventListener('click', function () {
+  resetUploadPreviewEffects();
+  imgUploadPreview.classList.add('effects__preview--heat');
+});
+
+
+// Функция обработчик нажатия клавиши Esc
+var escBigPictureClickHandler = function (evt) {
+  if (evt.keyCode === 27) {
+    closePopupBigPicture();
+  }
+};
+
+
+// Функция открывающая окно редактирования фото
+var openPopupBigPicture = function () {
+  bigPicture.classList.remove('hidden');
+  document.addEventListener('keydown', escBigPictureClickHandler);
+};
+
+
+// Функция закрывающая popup окно редактирования фото
+var closePopupBigPicture = function () {
+  bigPicture.classList.add('hidden');
+  document.removeEventListener('keydown', escBigPictureClickHandler);
+};
+
+
+// Прикручиваем к каждой картинке обработчик события открытия увеличенного изображения
+var allPhotos = document.querySelectorAll('.picture');
+for (var indexImg = 0; indexImg < allPhotos.length; indexImg++) {
+  allPhotos[indexImg].addEventListener('click', function () {
+    openPopupBigPicture();
+  });
+}
+
+
+// Закрытие отображения увеличенного изображения при нажатии на крестик
+var BigPictureCancel = document.querySelector('#picture-cancel');
+BigPictureCancel.addEventListener('click', function () {
+  closePopupBigPicture();
+});
+
+
+// Обработчик события на ползунке насыщенности
+var effectLevelPin = document.querySelector('.effect-level__pin');
+effectLevelPin.addEventListener('mouseup', function (evt) {
+  console.log(evt);
+});
