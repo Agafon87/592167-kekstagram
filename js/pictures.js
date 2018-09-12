@@ -267,9 +267,3 @@ BigPictureCancel.addEventListener('click', function () {
   closePopupBigPicture();
 });
 
-
-// Обработчик события на ползунке насыщенности
-var effectLevelPin = document.querySelector('.effect-level__pin');
-effectLevelPin.addEventListener('mouseup', function (evt) {
-  console.log(evt);
-});
