@@ -12,6 +12,19 @@ var INDEX_PHOTO_MIN = 1;
 var INDEX_PHOTO_MAX = AMOUNT_PHOTO;
 var AVATAR_AMOUNT_MIN = 1;
 var AVATAR_AMOUNT_MAX = 6;
+var ESC_KEYCODE_PRESS = 27;
+var EFFECT_CHROME_MIN = 0;
+var EFFECT_CHROME_MAX = 1;
+var EFFECT_SEPIA_MIN = 0;
+var EFFECT_SEPIA_MAX = 1;
+var EFFECT_MARVIN_MIN = 0;
+var EFFECT_MARVIN_MAX = 100;
+var EFFECT_PHOBOS_MIN = 0;
+var EFFECT_PHOBOS_MAX = 3;
+var EFFECT_HEAT_MIN = 1;
+var EFFECT_HEAT_MAX = 3;
+var ONE_HUNDRED_PERCENT = 100;
+
 
 var PHOTO_OTHER_PERSONS = [];
 
@@ -144,9 +157,17 @@ var uploadFile = document.querySelector('.img-upload__input');
 var changeForm = document.querySelector('.img-upload__overlay');
 var imgUploadPreview = document.querySelector('.img-upload__preview');
 
+
+// Функция сброса эффектов с картинки
+var resetUploadPreviewEffects = function () {
+  imgUploadPreview.className = 'img-upload__preview';
+  imgUploadPreview.removeAttribute('style');
+};
+
+
 // Функция обработчик нажатия клавиши Esc
 var escClickHandler = function (evt) {
-  if (evt.keyCode === 27) {
+  if (evt.keyCode === ESC_KEYCODE_PRESS) {
     closePopupChangeForm();
   }
 };
@@ -161,33 +182,23 @@ var openPopupChangeForm = function () {
 
 // Функция закрывающая popup окно редактирования фото
 var closePopupChangeForm = function () {
+  resetUploadPreviewEffects();
   changeForm.classList.add('hidden');
   document.removeEventListener('keydown', escClickHandler);
   uploadFile.value = '';
 };
 
 
-uploadFile.addEventListener('change', function () {
-  openPopupChangeForm();
-});
+uploadFile.addEventListener('change', openPopupChangeForm);
 
 
 var uploadCancel = document.querySelector('#upload-cancel');
-uploadCancel.addEventListener('click', function () {
-  closePopupChangeForm();
-});
-
-// Функция сброса эффектов с картинки
-var resetUploadPreviewEffects = function () {
-  imgUploadPreview.className = 'img-upload__preview';
-};
+uploadCancel.addEventListener('click', closePopupChangeForm);
 
 
 // Обработчик нажатия на радиобатон effect-none
 var radioEffectNone = document.querySelector('#effect-none');
-radioEffectNone.addEventListener('click', function () {
-  resetUploadPreviewEffects();
-});
+radioEffectNone.addEventListener('click', resetUploadPreviewEffects);
 
 
 // Обработчик нажатия на радиобатон Chrome
@@ -232,7 +243,7 @@ radioEffectHeat.addEventListener('click', function () {
 
 // Функция обработчик нажатия клавиши Esc
 var escBigPictureClickHandler = function (evt) {
-  if (evt.keyCode === 27) {
+  if (evt.keyCode === ESC_KEYCODE_PRESS) {
     closePopupBigPicture();
   }
 };
@@ -255,15 +266,39 @@ var closePopupBigPicture = function () {
 // Прикручиваем к каждой картинке обработчик события открытия увеличенного изображения
 var allPhotos = document.querySelectorAll('.picture');
 for (var indexImg = 0; indexImg < allPhotos.length; indexImg++) {
-  allPhotos[indexImg].addEventListener('click', function () {
-    openPopupBigPicture();
-  });
+  allPhotos[indexImg].addEventListener('click', openPopupBigPicture);
 }
 
 
 // Закрытие отображения увеличенного изображения при нажатии на крестик
 var BigPictureCancel = document.querySelector('#picture-cancel');
-BigPictureCancel.addEventListener('click', function () {
-  closePopupBigPicture();
-});
+BigPictureCancel.addEventListener('click', closePopupBigPicture);
 
+
+// Функция возвращающая пропорцию интенсивности эффекта в зависимости от установленной величины
+var getEffectProportion = function (minValue, maxValue) {
+  var effectLevelValue = document.querySelector('.effect-level__value').value;
+  return (effectLevelValue * maxValue / ONE_HUNDRED_PERCENT) + minValue;
+};
+
+
+// Словарь соответствий стилей эффектов с изменением интенсивности эффекта
+var effectStyleMap = {
+  'effects__preview--chrome': 'grayscale(' + getEffectProportion(EFFECT_CHROME_MIN, EFFECT_CHROME_MAX) + ')',
+  'effects__preview--sepia': 'sepia(' + getEffectProportion(EFFECT_SEPIA_MIN, EFFECT_SEPIA_MAX) + ')',
+  'effects__preview--marvin': 'invert(' + getEffectProportion(EFFECT_MARVIN_MIN, EFFECT_MARVIN_MAX) + '%)',
+  'effects__preview--phobos': 'blur(' + getEffectProportion(EFFECT_PHOBOS_MIN, EFFECT_PHOBOS_MAX) + 'px)',
+  'effects__preview--heat': 'brightness(' + getEffectProportion(EFFECT_HEAT_MIN, EFFECT_HEAT_MAX) + ')'
+};
+
+
+// Обработчик события слайдера
+var effectLevelPin = document.querySelector('.effect-level__pin');
+effectLevelPin.addEventListener('mouseup', function () {
+  var effectClassName = '';
+  if (imgUploadPreview.classList.length > 1) {
+    effectClassName = imgUploadPreview.classList[1];
+  }
+
+  imgUploadPreview.style.filter = effectStyleMap[effectClassName];
+});
