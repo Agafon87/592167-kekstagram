@@ -366,7 +366,7 @@ var isTwoHashTagsInOne = function (elem) {
 
 // Функция проверяющая что максимальная длина одного хэш-тега 20 символов, включая решётку
 var isHashTagMoreThanTwentySymbols = function (elem) {
-  return elem > 20;
+  return elem.length > 20;
 };
 
 
@@ -375,19 +375,25 @@ var testHashTags = function (element, arr) {
   var errorMessages = [];
   for (var hashIndex = 0; hashIndex < arr.length; hashIndex++) {
     var currentHash = arr[hashIndex];
-    errorMessages.push(!isHashTagBeginSymbolLattice(currentHash) ? 'хэш-тег должен начинаться с символа #' : '');
-    errorMessages.push(!isHashTagOnlySymbolLattice(currentHash) ? 'хэш-тег не может состоять только из одной решётки' : '');
+    errorMessages.push(isHashTagBeginSymbolLattice(currentHash) ? 'хэш-тег должен начинаться с символа #' : '');
+    errorMessages.push(isHashTagOnlySymbolLattice(currentHash) ? 'хэш-тег не может состоять только из одной решётки' : '');
     errorMessages.push(!isTwoHashTagsInOne(currentHash) ? 'хэш-теги разделяются пробелами' : '');
     errorMessages.push(isHashTagMoreThanTwentySymbols(currentHash) ? 'максимальная длина одного хэш-тега 20 символов, включая решётку' : '');
-    errorMessages.push(!compareArrayElement(arr) ? 'один и тот же хэш-тег не может быть использован дважды' : '');
   }
 
+  var tmp = '';
   for (var erMessageIndex = 0; erMessageIndex < errorMessages.length; erMessageIndex++) {
-    if (errorMessages[erMessageIndex] !== '') {
-      getIsNotValidObject(element, errorMessages[erMessageIndex]);
-    } else {
-      getIsValidObject(element);
+    if (tmp === '') {
+      tmp = errorMessages[erMessageIndex];
     }
+  }
+
+  if (tmp !== '') {
+    getIsNotValidObject(element, tmp);
+  } else if (!compareArrayElement(arr)) {
+    getIsNotValidObject(element, 'один и тот же хэш-тег не может быть использован дважды');
+  } else {
+    getIsValidObject(element);
   }
 };
 
