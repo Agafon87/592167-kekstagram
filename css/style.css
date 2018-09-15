@@ -1447,3 +1447,9 @@ main {
     grid-row: 1 / span 3;
   }
 }
+
+
+.not-valid {
+  background-color: #fadada;
+  border: 2px solid #e90000;
+}

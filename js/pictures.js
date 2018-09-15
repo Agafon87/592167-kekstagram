@@ -165,9 +165,10 @@ var resetUploadPreviewEffects = function () {
 };
 
 
-// Функция обработчик нажатия клавиши Esc
+// Функция обработчик нажатия клавиши Esc на форме редактирования фото
 var escClickHandler = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE_PRESS) {
+  var classTarget = evt.target.className;
+  if (evt.keyCode === ESC_KEYCODE_PRESS && classTarget !== 'text__hashtags' && classTarget !== 'text__description') {
     closePopupChangeForm();
   }
 };
@@ -302,3 +303,81 @@ effectLevelPin.addEventListener('mouseup', function () {
 
   imgUploadPreview.style.filter = effectStyleMap[effectClassName];
 });
+
+
+// Функция добавляющая класс not-valid на поле, если оно не валидно, и навешивает нужное сообщение
+var getIsNotValidObject = function (obj, errorMessage) {
+  obj.setCustomValidity(errorMessage);
+  obj.classList.add('not-valid');
+};
+
+
+// Функция удаляющая класс not-valid с поля
+var getIsValidObject = function (obj) {
+  obj.setCustomValidity('');
+  obj.classList.remove('not-valid');
+};
+
+
+// Функция сравнивающая элементы массива
+var compareArrayElement = function (arr) {
+  var compareResult = true;
+  for (var iArr = 0; iArr < arr.length; iArr++) {
+    for (var jArr = iArr + 1; jArr < arr.length; jArr++) {
+      var currentElement = arr[iArr];
+      var nextElement = arr[jArr];
+      if (currentElement.toLowerCase() === nextElement.toLowerCase()) {
+        compareResult = false;
+      }
+    }
+  }
+
+  return compareResult;
+};
+
+
+// Функция обработчик отправки формы
+var buttonSubmitHandler = function () {
+  var inputHash = document.querySelector('.text__hashtags');
+  var hashTags = inputHash.value.split(' ');
+  var errorMessage = '';
+  if (hashTags.length > 0 && hashTags.length <= 5) {
+    for (var hashIndex = 0; hashIndex < hashTags.length; hashIndex++) {
+      var currentHash = hashTags[hashIndex];
+      if (currentHash !== '' && currentHash[0] !== '#') {
+        errorMessage = 'хэш-тег должен начинаться с символа #';
+      } else if (currentHash === '#') {
+        errorMessage = 'хеш-тег не может состоять только из одной решётки';
+      } else if (currentHash.length > 0 && currentHash.length <= 20) {
+        var symbolLattice = [];
+        for (var letterIndex = 0; letterIndex < currentHash.length; letterIndex++) {
+          var letter = currentHash[letterIndex];
+          if (letter === '#') {
+            symbolLattice.push(letter);
+          }
+        }
+        if (symbolLattice.length > 1) {
+          errorMessage = 'хэш-теги разделяются пробелами';
+        }
+      } else if (currentHash.length > 20) {
+        errorMessage = 'максимальная длина одного хэш-тега 20 символов, включая решётку';
+      }
+    }
+    if (!compareArrayElement(hashTags)) {
+      errorMessage = 'один и тот же хэш-тег не может быть использован дважды';
+    }
+    if (errorMessage !== '') {
+      getIsNotValidObject(inputHash, errorMessage);
+    } else {
+      getIsValidObject(inputHash);
+    }
+  } else if (hashTags.length > 5) {
+    getIsNotValidObject(inputHash, 'Нельзя указывать больше пяти хэш-тегов');
+  } else {
+    getIsValidObject(inputHash);
+  }
+};
+
+// Обработчик отправки формы редактирования формы
+var buttonSubmit = document.querySelector('#upload-submit');
+buttonSubmit.addEventListener('click', buttonSubmitHandler);
