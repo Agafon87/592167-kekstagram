@@ -165,9 +165,10 @@ var resetUploadPreviewEffects = function () {
 };
 
 
-// Функция обработчик нажатия клавиши Esc
+// Функция обработчик нажатия клавиши Esc на форме редактирования фото
 var escClickHandler = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE_PRESS) {
+  var classTarget = evt.target.className;
+  if (evt.keyCode === ESC_KEYCODE_PRESS && classTarget !== 'text__hashtags' && classTarget !== 'text__description') {
     closePopupChangeForm();
   }
 };
@@ -302,3 +303,114 @@ effectLevelPin.addEventListener('mouseup', function () {
 
   imgUploadPreview.style.filter = effectStyleMap[effectClassName];
 });
+
+
+// Функция добавляющая класс not-valid на поле, если оно не валидно, и навешивает нужное сообщение
+var getIsNotValidObject = function (obj, errorMessage) {
+  obj.setCustomValidity(errorMessage);
+  obj.classList.add('not-valid');
+};
+
+
+// Функция удаляющая класс not-valid с поля
+var getIsValidObject = function (obj) {
+  obj.setCustomValidity('');
+  obj.classList.remove('not-valid');
+};
+
+
+// Функция сравнивающая элементы массива
+var compareArrayElement = function (arr) {
+  var compareResult = true;
+  for (var iArr = 0; iArr < arr.length; iArr++) {
+    for (var jArr = iArr + 1; jArr < arr.length; jArr++) {
+      var currentElement = arr[iArr];
+      var nextElement = arr[jArr];
+      if (currentElement.toLowerCase() === nextElement.toLowerCase()) {
+        compareResult = false;
+      }
+    }
+  }
+
+  return compareResult;
+};
+
+
+// Функция определяющая что хэш-тег должен начинаться с символа #
+var isHashTagBeginSymbolLattice = function (elem) {
+  return elem !== '' && elem[0] !== '#';
+};
+
+// Функция проверяющая что хэш-тег не может состоять только из одной решётки
+var isHashTagOnlySymbolLattice = function (elem) {
+  return elem === '#';
+};
+
+// Функция проверяющая что хэш-теги должны разделяться пробелами
+var isTwoHashTagsInOne = function (elem) {
+  if (elem.length > 0 && elem.length <= 20) {
+    var symbolLattice = [];
+    for (var letterIndex = 0; letterIndex < elem.length; letterIndex++) {
+      var letter = elem[letterIndex];
+      if (letter === '#') {
+        symbolLattice.push(letter);
+      }
+    }
+    if (symbolLattice.length > 1) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+// Функция проверяющая что максимальная длина одного хэш-тега 20 символов, включая решётку
+var isHashTagMoreThanTwentySymbols = function (elem) {
+  return elem.length > 20;
+};
+
+
+// Функция проверки хэш-тегов
+var testHashTags = function (element, arr) {
+  var errorMessages = [];
+  for (var hashIndex = 0; hashIndex < arr.length; hashIndex++) {
+    var currentHash = arr[hashIndex];
+    errorMessages.push(isHashTagBeginSymbolLattice(currentHash) ? 'хэш-тег должен начинаться с символа #' : '');
+    errorMessages.push(isHashTagOnlySymbolLattice(currentHash) ? 'хэш-тег не может состоять только из одной решётки' : '');
+    errorMessages.push(!isTwoHashTagsInOne(currentHash) ? 'хэш-теги разделяются пробелами' : '');
+    errorMessages.push(isHashTagMoreThanTwentySymbols(currentHash) ? 'максимальная длина одного хэш-тега 20 символов, включая решётку' : '');
+  }
+
+  var tmp = '';
+  for (var erMessageIndex = 0; erMessageIndex < errorMessages.length; erMessageIndex++) {
+    if (tmp === '') {
+      tmp = errorMessages[erMessageIndex];
+    }
+  }
+
+  if (tmp !== '') {
+    getIsNotValidObject(element, tmp);
+  } else if (!compareArrayElement(arr)) {
+    getIsNotValidObject(element, 'один и тот же хэш-тег не может быть использован дважды');
+  } else {
+    getIsValidObject(element);
+  }
+};
+
+
+// Функция обработчик отправки формы
+var buttonSubmitHandler = function () {
+  var inputHash = document.querySelector('.text__hashtags');
+  var hashTags = inputHash.value.split(' ');
+  if (hashTags.length > 0 && hashTags.length <= 5) {
+    testHashTags(inputHash, hashTags);
+  } else if (hashTags.length > 5) {
+    getIsNotValidObject(inputHash, 'Нельзя указывать больше пяти хэш-тегов');
+  } else {
+    getIsValidObject(inputHash);
+  }
+};
+
+// Обработчик отправки формы редактирования формы
+var buttonSubmit = document.querySelector('#upload-submit');
+buttonSubmit.addEventListener('click', buttonSubmitHandler);
