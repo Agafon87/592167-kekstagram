@@ -276,32 +276,104 @@ var BigPictureCancel = document.querySelector('#picture-cancel');
 BigPictureCancel.addEventListener('click', closePopupBigPicture);
 
 
+// Функция вычисляющая пропорцию глубины эффекта, переводя пиксели в проценты
+var getProportion = function (currentValue, minValue, maxValue) {
+  return Math.round(currentValue * ONE_HUNDRED_PERCENT / maxValue);
+};
+
 // Функция возвращающая пропорцию интенсивности эффекта в зависимости от установленной величины
-var getEffectProportion = function (minValue, maxValue) {
-  var effectLevelValue = document.querySelector('.effect-level__value').value;
-  return (effectLevelValue * maxValue / ONE_HUNDRED_PERCENT) + minValue;
+var getEffectProportion = function (levelValue, minValue, maxValue) {
+  return (levelValue * maxValue / ONE_HUNDRED_PERCENT) + minValue;
 };
 
 
-// Словарь соответствий стилей эффектов с изменением интенсивности эффекта
-var effectStyleMap = {
-  'effects__preview--chrome': 'grayscale(' + getEffectProportion(EFFECT_CHROME_MIN, EFFECT_CHROME_MAX) + ')',
-  'effects__preview--sepia': 'sepia(' + getEffectProportion(EFFECT_SEPIA_MIN, EFFECT_SEPIA_MAX) + ')',
-  'effects__preview--marvin': 'invert(' + getEffectProportion(EFFECT_MARVIN_MIN, EFFECT_MARVIN_MAX) + '%)',
-  'effects__preview--phobos': 'blur(' + getEffectProportion(EFFECT_PHOBOS_MIN, EFFECT_PHOBOS_MAX) + 'px)',
-  'effects__preview--heat': 'brightness(' + getEffectProportion(EFFECT_HEAT_MIN, EFFECT_HEAT_MAX) + ')'
-};
+// Функция возвращающая значение фильтра
+var getFilterValue = function (mapName, effectValue) {
+  var filterValue = '';
+  switch (mapName) {
+    case 'effects__preview--chrome':
+      filterValue = 'grayscale(' + getEffectProportion(effectValue, EFFECT_CHROME_MIN, EFFECT_CHROME_MAX) + ')';
+      break;
+    case 'effects__preview--sepia':
+      filterValue = 'sepia(' + getEffectProportion(effectValue, EFFECT_SEPIA_MIN, EFFECT_SEPIA_MAX) + ')';
+      break;
+    case 'effects__preview--marvin':
+      filterValue = 'invert(' + getEffectProportion(effectValue, EFFECT_MARVIN_MIN, EFFECT_MARVIN_MAX) + '%)';
+      break;
+    case 'effects__preview--phobos':
+      filterValue = 'blur(' + getEffectProportion(effectValue, EFFECT_PHOBOS_MIN, EFFECT_PHOBOS_MAX) + 'px)';
+      break;
+    case 'effects__preview--heat':
+      filterValue = 'brightness(' + getEffectProportion(effectValue, EFFECT_HEAT_MIN, EFFECT_HEAT_MAX) + ')';
+      break;
+    default:
+      break;
+  }
 
+  return filterValue;
+};
 
 // Обработчик события слайдера
 var effectLevelPin = document.querySelector('.effect-level__pin');
-effectLevelPin.addEventListener('mouseup', function () {
-  var effectClassName = '';
-  if (imgUploadPreview.classList.length > 1) {
-    effectClassName = imgUploadPreview.classList[1];
-  }
+var effectLevelValue = document.querySelector('.effect-level__value').value;
+effectLevelPin.addEventListener('mousedown', function (evt) {
+  var startPosition = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
 
-  imgUploadPreview.style.filter = effectStyleMap[effectClassName];
+  var dragged = false;
+
+  var currentLevelPinValue = '';
+
+  var mouseMoveHandler = function (moveEvt) {
+    var shift = {
+      x: startPosition.x - moveEvt.clientX,
+      y: startPosition.y - moveEvt.clientY
+    };
+
+    dragged = true;
+
+    startPosition = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var effectLevelPinValue = effectLevelPin.offsetLeft - shift.x;
+
+    if (effectLevelPinValue >= 0 && effectLevelPinValue < 455) {
+      effectLevelPin.style.left = effectLevelPinValue + 'px';
+      var effectLevelDepth = document.querySelector('.effect-level__depth');
+      currentLevelPinValue = getProportion(effectLevelPinValue, 0, 455);
+      effectLevelDepth.style.width = currentLevelPinValue + '%';
+    }
+
+    var effectClassName = '';
+
+    if (imgUploadPreview.classList.length > 1) {
+      effectClassName = imgUploadPreview.classList[1];
+      imgUploadPreview.removeAttribute('style');
+      imgUploadPreview.style.filter = getFilterValue(effectClassName, currentLevelPinValue);
+    }
+  };
+
+  var mouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+    var effectClassName = '';
+    if (imgUploadPreview.classList.length > 1) {
+      effectClassName = imgUploadPreview.classList[1];
+      imgUploadPreview.removeAttribute('style');
+      imgUploadPreview.style.filter = getFilterValue(effectClassName, (dragged) ? currentLevelPinValue : effectLevelValue);
+    }
+
+
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+  };
+
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
+
 });
 
 
