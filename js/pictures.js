@@ -24,6 +24,10 @@ var EFFECT_PHOBOS_MAX = 3;
 var EFFECT_HEAT_MIN = 1;
 var EFFECT_HEAT_MAX = 3;
 var ONE_HUNDRED_PERCENT = 100;
+var EFFECT_LEVEL_PIN_MIN = 0;
+var EFFECT_LEVEL_PIN_MAX = 455;
+var HASH_TAG_MAX_LENGTH = 20;
+var MAX_COUNT_HASH_TAGS = 5;
 
 
 var PHOTO_OTHER_PERSONS = [];
@@ -341,10 +345,10 @@ effectLevelPin.addEventListener('mousedown', function (evt) {
 
     var effectLevelPinValue = effectLevelPin.offsetLeft - shift.x;
 
-    if (effectLevelPinValue >= 0 && effectLevelPinValue < 455) {
+    if (effectLevelPinValue >= EFFECT_LEVEL_PIN_MIN && effectLevelPinValue < EFFECT_LEVEL_PIN_MAX) {
       effectLevelPin.style.left = effectLevelPinValue + 'px';
       var effectLevelDepth = document.querySelector('.effect-level__depth');
-      currentLevelPinValue = getProportion(effectLevelPinValue, 0, 455);
+      currentLevelPinValue = getProportion(effectLevelPinValue, EFFECT_LEVEL_PIN_MIN, EFFECT_LEVEL_PIN_MAX);
       effectLevelDepth.style.width = currentLevelPinValue + '%';
     }
 
@@ -420,7 +424,7 @@ var isHashTagOnlySymbolLattice = function (elem) {
 
 // Функция проверяющая что хэш-теги должны разделяться пробелами
 var isTwoHashTagsInOne = function (elem) {
-  if (elem.length > 0 && elem.length <= 20) {
+  if (elem.length > 0 && elem.length <= HASH_TAG_MAX_LENGTH) {
     var symbolLattice = [];
     for (var letterIndex = 0; letterIndex < elem.length; letterIndex++) {
       var letter = elem[letterIndex];
@@ -438,7 +442,7 @@ var isTwoHashTagsInOne = function (elem) {
 
 // Функция проверяющая что максимальная длина одного хэш-тега 20 символов, включая решётку
 var isHashTagMoreThanTwentySymbols = function (elem) {
-  return elem.length > 20;
+  return elem.length > HASH_TAG_MAX_LENGTH;
 };
 
 
@@ -454,11 +458,11 @@ var testHashTags = function (element, arr) {
   }
 
   var tmp = '';
-  for (var erMessageIndex = 0; erMessageIndex < errorMessages.length; erMessageIndex++) {
+  errorMessages.forEach(function (it) {
     if (tmp === '') {
-      tmp = errorMessages[erMessageIndex];
+      tmp = it;
     }
-  }
+  });
 
   if (tmp !== '') {
     getIsNotValidObject(element, tmp);
@@ -474,9 +478,9 @@ var testHashTags = function (element, arr) {
 var buttonSubmitHandler = function () {
   var inputHash = document.querySelector('.text__hashtags');
   var hashTags = inputHash.value.split(' ');
-  if (hashTags.length > 0 && hashTags.length <= 5) {
+  if (hashTags.length > 0 && hashTags.length <= MAX_COUNT_HASH_TAGS) {
     testHashTags(inputHash, hashTags);
-  } else if (hashTags.length > 5) {
+  } else if (hashTags.length > MAX_COUNT_HASH_TAGS) {
     getIsNotValidObject(inputHash, 'Нельзя указывать больше пяти хэш-тегов');
   } else {
     getIsValidObject(inputHash);
