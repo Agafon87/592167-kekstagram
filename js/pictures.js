@@ -200,12 +200,22 @@ uploadFile.addEventListener('change', openPopupChangeForm);
 var uploadCancel = document.querySelector('#upload-cancel');
 uploadCancel.addEventListener('click', closePopupChangeForm);
 
+// Функция возвращающая положение пина слайдера в позиции 100%
+var getSliderPinOneHundredPercent = function () {
+  var effectLevelPin = document.querySelector('.effect-level__pin');
+  var effectLevelDepth = document.querySelector('.effect-level__depth');
+
+  effectLevelPin.style.left = EFFECT_LEVEL_PIN_MAX + 'px';
+  effectLevelDepth.style.width = ONE_HUNDRED_PERCENT + '%';
+};
+
+var sliderEffectLevel = document.querySelector('.img-upload__effect-level.effect-level');
 
 // Обработчик нажатия на радиобатон effect-none
 var radioEffectNone = document.querySelector('#effect-none');
 radioEffectNone.addEventListener('click', function () {
-  var buttonUploadCancel = document.querySelector('#upload-cancel');
-  buttonUploadCancel.click();
+  resetUploadPreviewEffects();
+  sliderEffectLevel.classList.add('visually-hidden');
 });
 
 
@@ -213,6 +223,8 @@ radioEffectNone.addEventListener('click', function () {
 var radioEffectChrome = document.querySelector('#effect-chrome');
 radioEffectChrome.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
+  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--chrome');
 });
 
@@ -221,6 +233,8 @@ radioEffectChrome.addEventListener('click', function () {
 var radioEffectSepia = document.querySelector('#effect-sepia');
 radioEffectSepia.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
+  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--sepia');
 });
 
@@ -229,6 +243,8 @@ radioEffectSepia.addEventListener('click', function () {
 var radioEffectMarvin = document.querySelector('#effect-marvin');
 radioEffectMarvin.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
+  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--marvin');
 });
 
@@ -237,6 +253,8 @@ radioEffectMarvin.addEventListener('click', function () {
 var radioEffectPhobos = document.querySelector('#effect-phobos');
 radioEffectPhobos.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
+  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--phobos');
 });
 
@@ -245,6 +263,8 @@ radioEffectPhobos.addEventListener('click', function () {
 var radioEffectHeat = document.querySelector('#effect-heat');
 radioEffectHeat.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
+  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--heat');
 });
 
