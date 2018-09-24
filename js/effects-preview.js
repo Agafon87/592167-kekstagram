@@ -13,26 +13,43 @@
   var EFFECT_HEAT_MIN = 0;
   var EFFECT_HEAT_MAX = 2;
   var ONE_HUNDRED_PERCENT = 100;
+  var EFFECT_LEVEL_PIN_MAX = 455;
 
   var imgUploadPreview = document.querySelector('.img-upload__preview');
+  var sliderEffectLevel = document.querySelector('.img-upload__effect-level.effect-level');
 
 
   // Функция сброса эффектов с картинки
   var resetUploadPreviewEffects = function () {
     imgUploadPreview.className = 'img-upload__preview';
     imgUploadPreview.removeAttribute('style');
+    sliderEffectLevel.classList.remove('visually-hidden');
+  };
+
+
+  // Функция возвращающая положение пина слайдера в позиции 100%
+  var getSliderPinOneHundredPercent = function () {
+    var effectLevelPin = document.querySelector('.effect-level__pin');
+    var effectLevelDepth = document.querySelector('.effect-level__depth');
+
+    effectLevelPin.style.left = EFFECT_LEVEL_PIN_MAX + 'px';
+    effectLevelDepth.style.width = ONE_HUNDRED_PERCENT + '%';
   };
 
 
   // Обработчик нажатия на радиобатон effect-none
   var radioEffectNone = document.querySelector('#effect-none');
-  radioEffectNone.addEventListener('click', resetUploadPreviewEffects);
+  radioEffectNone.addEventListener('click', function () {
+    resetUploadPreviewEffects();
+    sliderEffectLevel.classList.add('visually-hidden');
+  });
 
 
   // Обработчик нажатия на радиобатон Chrome
   var radioEffectChrome = document.querySelector('#effect-chrome');
   radioEffectChrome.addEventListener('click', function () {
     resetUploadPreviewEffects();
+    getSliderPinOneHundredPercent();
     imgUploadPreview.classList.add('effects__preview--chrome');
   });
 
@@ -41,6 +58,7 @@
   var radioEffectSepia = document.querySelector('#effect-sepia');
   radioEffectSepia.addEventListener('click', function () {
     resetUploadPreviewEffects();
+    getSliderPinOneHundredPercent();
     imgUploadPreview.classList.add('effects__preview--sepia');
   });
 
@@ -49,6 +67,7 @@
   var radioEffectMarvin = document.querySelector('#effect-marvin');
   radioEffectMarvin.addEventListener('click', function () {
     resetUploadPreviewEffects();
+    getSliderPinOneHundredPercent();
     imgUploadPreview.classList.add('effects__preview--marvin');
   });
 
@@ -57,6 +76,7 @@
   var radioEffectPhobos = document.querySelector('#effect-phobos');
   radioEffectPhobos.addEventListener('click', function () {
     resetUploadPreviewEffects();
+    getSliderPinOneHundredPercent();
     imgUploadPreview.classList.add('effects__preview--phobos');
   });
 
@@ -65,6 +85,7 @@
   var radioEffectHeat = document.querySelector('#effect-heat');
   radioEffectHeat.addEventListener('click', function () {
     resetUploadPreviewEffects();
+    getSliderPinOneHundredPercent();
     imgUploadPreview.classList.add('effects__preview--heat');
   });
 

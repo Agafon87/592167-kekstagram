@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var ESC_KEYCODE_PRESS = 27;
 
   var uploadFile = document.querySelector('.img-upload__input');
   var changeForm = document.querySelector('.img-upload__overlay');
@@ -9,7 +8,7 @@
   // Функция обработчик нажатия клавиши Esc на форме редактирования фото
   var escClickHandler = function (evt) {
     var classTarget = evt.target.className;
-    if (evt.keyCode === ESC_KEYCODE_PRESS && classTarget !== 'text__hashtags' && classTarget !== 'text__description') {
+    if (evt.keyCode === window.commonConstants.ESC_KEYCODE_PRESS && classTarget !== 'text__hashtags' && classTarget !== 'text__description') {
       closePopupChangeForm();
     }
   };

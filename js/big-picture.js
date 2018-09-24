@@ -4,7 +4,6 @@
   // Объявление переменных
   var AVATAR_AMOUNT_MIN = 1;
   var AVATAR_AMOUNT_MAX = 6;
-  var ESC_KEYCODE_PRESS = 27;
 
   // Задание 4 Показываем элемент big-picture
   var bigPicture = document.querySelector('.big-picture');
@@ -41,7 +40,7 @@
 
   // Функция обработчик нажатия клавиши Esc
   var escBigPictureClickHandler = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE_PRESS) {
+    if (evt.keyCode === window.commonConstants.ESC_KEYCODE_PRESS) {
       closePopupBigPicture();
     }
   };
