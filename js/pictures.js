@@ -160,12 +160,14 @@ bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
 var uploadFile = document.querySelector('.img-upload__input');
 var changeForm = document.querySelector('.img-upload__overlay');
 var imgUploadPreview = document.querySelector('.img-upload__preview');
+var sliderEffectLevel = document.querySelector('.img-upload__effect-level.effect-level');
 
 
 // Функция сброса эффектов с картинки
 var resetUploadPreviewEffects = function () {
   imgUploadPreview.className = 'img-upload__preview';
   imgUploadPreview.removeAttribute('style');
+  sliderEffectLevel.classList.remove('visually-hidden');
 };
 
 
@@ -209,7 +211,6 @@ var getSliderPinOneHundredPercent = function () {
   effectLevelDepth.style.width = ONE_HUNDRED_PERCENT + '%';
 };
 
-var sliderEffectLevel = document.querySelector('.img-upload__effect-level.effect-level');
 
 // Обработчик нажатия на радиобатон effect-none
 var radioEffectNone = document.querySelector('#effect-none');
@@ -224,7 +225,6 @@ var radioEffectChrome = document.querySelector('#effect-chrome');
 radioEffectChrome.addEventListener('click', function () {
   resetUploadPreviewEffects();
   getSliderPinOneHundredPercent();
-  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--chrome');
 });
 
@@ -234,7 +234,6 @@ var radioEffectSepia = document.querySelector('#effect-sepia');
 radioEffectSepia.addEventListener('click', function () {
   resetUploadPreviewEffects();
   getSliderPinOneHundredPercent();
-  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--sepia');
 });
 
@@ -244,7 +243,6 @@ var radioEffectMarvin = document.querySelector('#effect-marvin');
 radioEffectMarvin.addEventListener('click', function () {
   resetUploadPreviewEffects();
   getSliderPinOneHundredPercent();
-  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--marvin');
 });
 
@@ -254,7 +252,6 @@ var radioEffectPhobos = document.querySelector('#effect-phobos');
 radioEffectPhobos.addEventListener('click', function () {
   resetUploadPreviewEffects();
   getSliderPinOneHundredPercent();
-  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--phobos');
 });
 
@@ -264,7 +261,6 @@ var radioEffectHeat = document.querySelector('#effect-heat');
 radioEffectHeat.addEventListener('click', function () {
   resetUploadPreviewEffects();
   getSliderPinOneHundredPercent();
-  sliderEffectLevel.classList.remove('visually-hidden');
   imgUploadPreview.classList.add('effects__preview--heat');
 });
 
