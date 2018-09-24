@@ -24,6 +24,10 @@ var EFFECT_PHOBOS_MAX = 3;
 var EFFECT_HEAT_MIN = 1;
 var EFFECT_HEAT_MAX = 3;
 var ONE_HUNDRED_PERCENT = 100;
+var EFFECT_LEVEL_PIN_MIN = 0;
+var EFFECT_LEVEL_PIN_MAX = 455;
+var HASH_TAG_MAX_LENGTH = 20;
+var MAX_COUNT_HASH_TAGS = 5;
 
 
 var PHOTO_OTHER_PERSONS = [];
@@ -156,12 +160,14 @@ bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
 var uploadFile = document.querySelector('.img-upload__input');
 var changeForm = document.querySelector('.img-upload__overlay');
 var imgUploadPreview = document.querySelector('.img-upload__preview');
+var sliderEffectLevel = document.querySelector('.img-upload__effect-level.effect-level');
 
 
 // Функция сброса эффектов с картинки
 var resetUploadPreviewEffects = function () {
   imgUploadPreview.className = 'img-upload__preview';
   imgUploadPreview.removeAttribute('style');
+  sliderEffectLevel.classList.remove('visually-hidden');
 };
 
 
@@ -196,16 +202,29 @@ uploadFile.addEventListener('change', openPopupChangeForm);
 var uploadCancel = document.querySelector('#upload-cancel');
 uploadCancel.addEventListener('click', closePopupChangeForm);
 
+// Функция возвращающая положение пина слайдера в позиции 100%
+var getSliderPinOneHundredPercent = function () {
+  var effectLevelPin = document.querySelector('.effect-level__pin');
+  var effectLevelDepth = document.querySelector('.effect-level__depth');
+
+  effectLevelPin.style.left = EFFECT_LEVEL_PIN_MAX + 'px';
+  effectLevelDepth.style.width = ONE_HUNDRED_PERCENT + '%';
+};
+
 
 // Обработчик нажатия на радиобатон effect-none
 var radioEffectNone = document.querySelector('#effect-none');
-radioEffectNone.addEventListener('click', resetUploadPreviewEffects);
+radioEffectNone.addEventListener('click', function () {
+  resetUploadPreviewEffects();
+  sliderEffectLevel.classList.add('visually-hidden');
+});
 
 
 // Обработчик нажатия на радиобатон Chrome
 var radioEffectChrome = document.querySelector('#effect-chrome');
 radioEffectChrome.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
   imgUploadPreview.classList.add('effects__preview--chrome');
 });
 
@@ -214,6 +233,7 @@ radioEffectChrome.addEventListener('click', function () {
 var radioEffectSepia = document.querySelector('#effect-sepia');
 radioEffectSepia.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
   imgUploadPreview.classList.add('effects__preview--sepia');
 });
 
@@ -222,6 +242,7 @@ radioEffectSepia.addEventListener('click', function () {
 var radioEffectMarvin = document.querySelector('#effect-marvin');
 radioEffectMarvin.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
   imgUploadPreview.classList.add('effects__preview--marvin');
 });
 
@@ -230,6 +251,7 @@ radioEffectMarvin.addEventListener('click', function () {
 var radioEffectPhobos = document.querySelector('#effect-phobos');
 radioEffectPhobos.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
   imgUploadPreview.classList.add('effects__preview--phobos');
 });
 
@@ -238,6 +260,7 @@ radioEffectPhobos.addEventListener('click', function () {
 var radioEffectHeat = document.querySelector('#effect-heat');
 radioEffectHeat.addEventListener('click', function () {
   resetUploadPreviewEffects();
+  getSliderPinOneHundredPercent();
   imgUploadPreview.classList.add('effects__preview--heat');
 });
 
@@ -276,32 +299,104 @@ var BigPictureCancel = document.querySelector('#picture-cancel');
 BigPictureCancel.addEventListener('click', closePopupBigPicture);
 
 
+// Функция вычисляющая пропорцию глубины эффекта, переводя пиксели в проценты
+var getProportion = function (currentValue, minValue, maxValue) {
+  return Math.round(currentValue * ONE_HUNDRED_PERCENT / maxValue);
+};
+
 // Функция возвращающая пропорцию интенсивности эффекта в зависимости от установленной величины
-var getEffectProportion = function (minValue, maxValue) {
-  var effectLevelValue = document.querySelector('.effect-level__value').value;
-  return (effectLevelValue * maxValue / ONE_HUNDRED_PERCENT) + minValue;
+var getEffectProportion = function (levelValue, minValue, maxValue) {
+  return (levelValue * maxValue / ONE_HUNDRED_PERCENT) + minValue;
 };
 
 
-// Словарь соответствий стилей эффектов с изменением интенсивности эффекта
-var effectStyleMap = {
-  'effects__preview--chrome': 'grayscale(' + getEffectProportion(EFFECT_CHROME_MIN, EFFECT_CHROME_MAX) + ')',
-  'effects__preview--sepia': 'sepia(' + getEffectProportion(EFFECT_SEPIA_MIN, EFFECT_SEPIA_MAX) + ')',
-  'effects__preview--marvin': 'invert(' + getEffectProportion(EFFECT_MARVIN_MIN, EFFECT_MARVIN_MAX) + '%)',
-  'effects__preview--phobos': 'blur(' + getEffectProportion(EFFECT_PHOBOS_MIN, EFFECT_PHOBOS_MAX) + 'px)',
-  'effects__preview--heat': 'brightness(' + getEffectProportion(EFFECT_HEAT_MIN, EFFECT_HEAT_MAX) + ')'
-};
+// Функция возвращающая значение фильтра
+var getFilterValue = function (mapName, effectValue) {
+  var filterValue = '';
+  switch (mapName) {
+    case 'effects__preview--chrome':
+      filterValue = 'grayscale(' + getEffectProportion(effectValue, EFFECT_CHROME_MIN, EFFECT_CHROME_MAX) + ')';
+      break;
+    case 'effects__preview--sepia':
+      filterValue = 'sepia(' + getEffectProportion(effectValue, EFFECT_SEPIA_MIN, EFFECT_SEPIA_MAX) + ')';
+      break;
+    case 'effects__preview--marvin':
+      filterValue = 'invert(' + getEffectProportion(effectValue, EFFECT_MARVIN_MIN, EFFECT_MARVIN_MAX) + '%)';
+      break;
+    case 'effects__preview--phobos':
+      filterValue = 'blur(' + getEffectProportion(effectValue, EFFECT_PHOBOS_MIN, EFFECT_PHOBOS_MAX) + 'px)';
+      break;
+    case 'effects__preview--heat':
+      filterValue = 'brightness(' + getEffectProportion(effectValue, EFFECT_HEAT_MIN, EFFECT_HEAT_MAX) + ')';
+      break;
+    default:
+      break;
+  }
 
+  return filterValue;
+};
 
 // Обработчик события слайдера
 var effectLevelPin = document.querySelector('.effect-level__pin');
-effectLevelPin.addEventListener('mouseup', function () {
-  var effectClassName = '';
-  if (imgUploadPreview.classList.length > 1) {
-    effectClassName = imgUploadPreview.classList[1];
-  }
+var effectLevelValue = document.querySelector('.effect-level__value').value;
+effectLevelPin.addEventListener('mousedown', function (evt) {
+  var startPosition = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
 
-  imgUploadPreview.style.filter = effectStyleMap[effectClassName];
+  var dragged = false;
+
+  var currentLevelPinValue = '';
+
+  var mouseMoveHandler = function (moveEvt) {
+    var shift = {
+      x: startPosition.x - moveEvt.clientX,
+      y: startPosition.y - moveEvt.clientY
+    };
+
+    dragged = true;
+
+    startPosition = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var effectLevelPinValue = effectLevelPin.offsetLeft - shift.x;
+
+    if (effectLevelPinValue >= EFFECT_LEVEL_PIN_MIN && effectLevelPinValue < EFFECT_LEVEL_PIN_MAX) {
+      effectLevelPin.style.left = effectLevelPinValue + 'px';
+      var effectLevelDepth = document.querySelector('.effect-level__depth');
+      currentLevelPinValue = getProportion(effectLevelPinValue, EFFECT_LEVEL_PIN_MIN, EFFECT_LEVEL_PIN_MAX);
+      effectLevelDepth.style.width = currentLevelPinValue + '%';
+    }
+
+    var effectClassName = '';
+
+    if (imgUploadPreview.classList.length > 1) {
+      effectClassName = imgUploadPreview.classList[1];
+      imgUploadPreview.removeAttribute('style');
+      imgUploadPreview.style.filter = getFilterValue(effectClassName, currentLevelPinValue);
+    }
+  };
+
+  var mouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+    var effectClassName = '';
+    if (imgUploadPreview.classList.length > 1) {
+      effectClassName = imgUploadPreview.classList[1];
+      imgUploadPreview.removeAttribute('style');
+      imgUploadPreview.style.filter = getFilterValue(effectClassName, (dragged) ? currentLevelPinValue : effectLevelValue);
+    }
+
+
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+  };
+
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
+
 });
 
 
@@ -348,7 +443,7 @@ var isHashTagOnlySymbolLattice = function (elem) {
 
 // Функция проверяющая что хэш-теги должны разделяться пробелами
 var isTwoHashTagsInOne = function (elem) {
-  if (elem.length > 0 && elem.length <= 20) {
+  if (elem.length > 0 && elem.length <= HASH_TAG_MAX_LENGTH) {
     var symbolLattice = [];
     for (var letterIndex = 0; letterIndex < elem.length; letterIndex++) {
       var letter = elem[letterIndex];
@@ -366,7 +461,7 @@ var isTwoHashTagsInOne = function (elem) {
 
 // Функция проверяющая что максимальная длина одного хэш-тега 20 символов, включая решётку
 var isHashTagMoreThanTwentySymbols = function (elem) {
-  return elem.length > 20;
+  return elem.length > HASH_TAG_MAX_LENGTH;
 };
 
 
@@ -382,11 +477,11 @@ var testHashTags = function (element, arr) {
   }
 
   var tmp = '';
-  for (var erMessageIndex = 0; erMessageIndex < errorMessages.length; erMessageIndex++) {
+  errorMessages.forEach(function (it) {
     if (tmp === '') {
-      tmp = errorMessages[erMessageIndex];
+      tmp = it;
     }
-  }
+  });
 
   if (tmp !== '') {
     getIsNotValidObject(element, tmp);
@@ -402,9 +497,9 @@ var testHashTags = function (element, arr) {
 var buttonSubmitHandler = function () {
   var inputHash = document.querySelector('.text__hashtags');
   var hashTags = inputHash.value.split(' ');
-  if (hashTags.length > 0 && hashTags.length <= 5) {
+  if (hashTags.length > 0 && hashTags.length <= MAX_COUNT_HASH_TAGS) {
     testHashTags(inputHash, hashTags);
-  } else if (hashTags.length > 5) {
+  } else if (hashTags.length > MAX_COUNT_HASH_TAGS) {
     getIsNotValidObject(inputHash, 'Нельзя указывать больше пяти хэш-тегов');
   } else {
     getIsValidObject(inputHash);
