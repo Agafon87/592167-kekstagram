@@ -203,7 +203,10 @@ uploadCancel.addEventListener('click', closePopupChangeForm);
 
 // Обработчик нажатия на радиобатон effect-none
 var radioEffectNone = document.querySelector('#effect-none');
-radioEffectNone.addEventListener('click', resetUploadPreviewEffects);
+radioEffectNone.addEventListener('click', function () {
+  var buttonUploadCancel = document.querySelector('#upload-cancel');
+  buttonUploadCancel.click();
+});
 
 
 // Обработчик нажатия на радиобатон Chrome
