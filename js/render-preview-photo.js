@@ -102,6 +102,6 @@
   photoListElement.appendChild(fragment);
 
   window.renderPreviewPhoto = {
-    photoOtherPersons: PHOTO_OTHER_PERSONS[0]
+    photoOtherPersons: PHOTO_OTHER_PERSONS
   };
 })();
