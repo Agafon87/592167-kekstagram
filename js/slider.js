@@ -45,7 +45,7 @@
 
       if (imgUploadPreview.classList.length > 1) {
         effectClassName = imgUploadPreview.classList[1];
-        imgUploadPreview.removeAttribute('style');
+        imgUploadPreview.style.filter = '';
         imgUploadPreview.style.filter = window.effectsPreview.getFilterValue(effectClassName, currentLevelPinValue);
       }
     };
@@ -55,7 +55,7 @@
       var effectClassName = '';
       if (imgUploadPreview.classList.length > 1) {
         effectClassName = imgUploadPreview.classList[1];
-        imgUploadPreview.removeAttribute('style');
+        imgUploadPreview.style.filter = '';
         imgUploadPreview.style.filter = window.effectsPreview.getFilterValue(effectClassName, (dragged) ? currentLevelPinValue : effectLevelValue);
       }
 
