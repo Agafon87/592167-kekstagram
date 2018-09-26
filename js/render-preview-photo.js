@@ -42,6 +42,7 @@
     };
   };
 
+
   // Функция возвращающая комментарии к фотографии
   var getPhotoComments = function () {
     var arrPhotoComments = [];
@@ -53,10 +54,39 @@
     return arrPhotoComments;
   };
 
-  // Функция формирующая объект фото и размещающая его в массиве PHOTO_OTHER_PERSONS
-  (function () {
+
+  // Находим template picture и записываем его в переменную
+  var pictureOtherPersonsTemplate = document.querySelector('#picture')
+    .content
+    .querySelector('.picture');
+
+  var renderPhoto = function (photo) {
+    var photoElement = pictureOtherPersonsTemplate.cloneNode(true);
+
+    photoElement.querySelector('.picture__img').src = photo.url;
+    photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
+    photoElement.querySelector('.picture__likes').textContent = photo.likes;
+
+    return photoElement;
+  };
+
+
+  var renderPhotos = function () {
+    var photoListElement = document.querySelector('.pictures');
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < PHOTO_OTHER_PERSONS.length; i++) {
+      var picture = renderPhoto(PHOTO_OTHER_PERSONS[i]);
+      fragment.appendChild(picture);
+    }
+    photoListElement.appendChild(fragment);
+
+  };
+
+
+  var init = function () {
     var arrayIndexPhoto = [];
-    for (;;) {
+    for (; ;) {
       if (arrayIndexPhoto.length >= INDEX_PHOTO_MAX) {
         break;
       }
@@ -71,37 +101,16 @@
       var photoDescription = getPhotoDescription(arrayIndexPhoto[i], amountLikesPhoto, getPhotoComments(), descriptionPhoto);
       PHOTO_OTHER_PERSONS.push(photoDescription);
     }
-  })();
-
-  // Находим элемент в который потом вставим фото других пользователей
-  var photoListElement = document.querySelector('.pictures');
-
-  // Находим template picture и записываем его в переменную
-  var pictureOtherPersonsTemplate = document.querySelector('#picture')
-  .content
-  .querySelector('.picture');
-
-  var renderPhoto = function (photo) {
-    var photoElement = pictureOtherPersonsTemplate.cloneNode(true);
-
-    photoElement.querySelector('.picture__img').src = photo.url;
-    photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
-    photoElement.querySelector('.picture__likes').textContent = photo.likes;
-
-    return photoElement;
   };
 
-  var fragment = document.createDocumentFragment();
+  // лучшая переносимость, дольнейшая подрежка кода, при необходимости можем вынести в window для отложенной инициализации
+  init();
+  // вынесено в отдельную функцию для возможности отложенной отрисовки... и + см. выше
+  renderPhotos();
 
-  for (var i = 0; i < PHOTO_OTHER_PERSONS.length; i++) {
-    var picture = renderPhoto(PHOTO_OTHER_PERSONS[i]);
 
-    fragment.appendChild(picture);
-  }
-
-  photoListElement.appendChild(fragment);
-
-  window.renderPreviewPhoto = {
-    photoOtherPersons: PHOTO_OTHER_PERSONS
+  window.getPhotoOtherPersons = function () {
+    return PHOTO_OTHER_PERSONS;
   };
+
 })();
