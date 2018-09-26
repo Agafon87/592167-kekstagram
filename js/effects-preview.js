@@ -17,6 +17,7 @@
 
   var imgUploadPreview = document.querySelector('.img-upload__preview');
   var sliderEffectLevel = document.querySelector('.img-upload__effect-level.effect-level');
+  var scaleControlValue = document.querySelector('.scale__control--value');
 
 
   // Функция сброса эффектов с картинки
@@ -24,6 +25,8 @@
     imgUploadPreview.className = 'img-upload__preview';
     imgUploadPreview.removeAttribute('style');
     sliderEffectLevel.classList.remove('visually-hidden');
+    scaleControlValue.removeAttribute('value');
+    scaleControlValue.setAttribute('value', '100%');
   };
 
 
