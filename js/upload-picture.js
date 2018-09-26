@@ -4,6 +4,10 @@
 
   var uploadFile = document.querySelector('.img-upload__input');
   var changeForm = document.querySelector('.img-upload__overlay');
+  var effectLevelDepth = document.querySelector('.effect-level__depth');
+  var effectLevelPin = document.querySelector('.effect-level__pin');
+  var textHashtags = document.querySelector('.text__hashtags');
+  var textDescription = document.querySelector('.text__description');
 
   // Функция обработчик нажатия клавиши Esc на форме редактирования фото
   var escClickHandler = function (evt) {
@@ -24,9 +28,18 @@
   // Функция закрывающая popup окно редактирования фото
   var closePopupChangeForm = function () {
     window.effectsPreview.resetUploadPreviewEffects();
-    changeForm.classList.add('hidden');
+    effectLevelDepth.style.width = '20%';
+    effectLevelPin.style.left = '99px';
+    textHashtags.value = '';
+    window.validation.getIsValidObject(textHashtags);
+    textDescription.value = '';
+    var effectRadio = document.querySelector('input[type="radio"]:checked');
+    if (effectRadio) {
+      effectRadio.checked = false;
+    }
     document.removeEventListener('keydown', escClickHandler);
     uploadFile.value = '';
+    changeForm.classList.add('hidden');
   };
 
 

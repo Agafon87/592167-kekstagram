@@ -25,7 +25,7 @@
 
   // Функция обработчик отправки формы
   var buttonSubmitHandler = function (evt) {
-    if (window.validation()) {
+    if (window.validation.getValidationHash()) {
       window.backend.save(new FormData(form), cbSuccess, cbError);
       evt.preventDefault();
     }
