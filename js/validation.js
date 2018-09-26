@@ -95,7 +95,7 @@
   };
 
 
-  var getValidationHash = function () {
+  window.validation = function () {
     var inputHash = document.querySelector('.text__hashtags');
     var hashTags = inputHash.value.split(' ');
     if (hashTags.length > 0 && hashTags.length <= MAX_COUNT_HASH_TAGS) {
@@ -105,9 +105,11 @@
     } else {
       getIsValidObject(inputHash);
     }
+
+    return inputHash.validity.valid;
   };
 
-  window.validation = {
-    getValidationHash: getValidationHash
-  };
+  // window.validation = {
+  //   getValidationHash: getValidationHash
+  // };
 })();

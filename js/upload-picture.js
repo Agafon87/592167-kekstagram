@@ -35,4 +35,8 @@
 
   var uploadCancel = document.querySelector('#upload-cancel');
   uploadCancel.addEventListener('click', closePopupChangeForm);
+
+  window.uploadPicture = {
+    closePopupChangeForm: closePopupChangeForm
+  };
 })();

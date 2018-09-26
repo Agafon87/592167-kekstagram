@@ -22,7 +22,7 @@
       cbError('Запрос не успел выполниться за ' + xhr.timeout + ' мс');
     });
 
-    xhr.timeout = 1;
+    xhr.timeout = 1000;
 
     return xhr;
   };
