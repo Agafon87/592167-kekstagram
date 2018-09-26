@@ -71,12 +71,14 @@
 
 
   // Прикручиваем к каждой картинке обработчик события открытия увеличенного изображения
-  var allPhotos = document.querySelectorAll('.picture');
-  for (var indexImg = 0; indexImg < allPhotos.length; indexImg++) {
-    allPhotos[indexImg].addEventListener('click', function (evt) {
-      renderBigPicture(findPicture(evt));
-    });
-  }
+  window.bigPicture = function () {
+    var allPhotos = document.querySelectorAll('.picture');
+    for (var indexImg = 0; indexImg < allPhotos.length; indexImg++) {
+      allPhotos[indexImg].addEventListener('click', function (evt) {
+        renderBigPicture(findPicture(evt));
+      });
+    }
+  };
 
 
   // Закрытие отображения увеличенного изображения при нажатии на крестик

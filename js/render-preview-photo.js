@@ -31,12 +31,23 @@
 
     photoListElement.appendChild(fragment);
 
+    window.bigPicture();
 
     window.getPhotoOtherPersons = function () {
       return photos;
     };
   };
 
-  window.backend.load(cbSuccess, window.util.cbError);
+  var cbError = function (errorMessage) {
+    var elem = document.querySelector('.error-message-from-server');
+    if (!elem) {
+      var container = document.createElement('div');
+      container.classList.add('error-message-from-server');
+      container.textContent = errorMessage;
+      document.body.insertBefore(container, document.body.children[0]);
+    }
+  };
+
+  window.backend.load(cbSuccess, cbError);
 
 })();
