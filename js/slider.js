@@ -16,7 +16,6 @@
       y: evt.clientY
     };
 
-    var dragged = false;
 
     var currentLevelPinValue = '';
 
@@ -26,7 +25,6 @@
         y: startPosition.y - moveEvt.clientY
       };
 
-      dragged = true;
 
       startPosition = {
         x: moveEvt.clientX,
