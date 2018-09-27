@@ -42,14 +42,13 @@
 
     for (var i = 0; i < photos.length; i++) {
       var picture = renderPhoto(photos[i]);
-      picture.addEventListener('click', window.util.openPopupBigPicture);
-
       fragment.appendChild(picture);
     }
 
     photoListElement.appendChild(fragment);
 
     window.bigPicture();
+    window.photoSort();
 
     window.getPhotoOtherPersons = function () {
       return photos;
