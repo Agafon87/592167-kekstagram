@@ -4,10 +4,14 @@
   // Объявление переменных
   var AVATAR_AMOUNT_MIN = 1;
   var AVATAR_AMOUNT_MAX = 6;
+  var AMOUNT_COMMENTS = 5;
 
   var bigPicture = document.querySelector('.big-picture');
   var cloneBigPictureComment = bigPicture.querySelector('.social__comment').cloneNode(true);
+  var bigPictureComments = bigPicture.querySelector('.social__comments');
+  var commentsLoader = document.querySelector('.comments-loader');
   var body = document.body;
+  var necessaryComments;
 
   // Функция возвращающая комментарий
   var renderComment = function (comment) {
@@ -17,6 +21,29 @@
     cloneElement.querySelector('.social__text').textContent = comment;
 
     return cloneElement;
+  };
+
+
+  // Функция добавляющая комментарии при нажатии кнопки commentsLoader
+  var buttonCommentsLoaderClickHandler = function () {
+    var amountVisibleComments = bigPictureComments.querySelectorAll('.social__comment');
+    var differenceVisibleCommentsAndAllComments = necessaryComments.length - amountVisibleComments.length;
+    var newPortionComments;
+    var fragmentCommentsNew = document.createDocumentFragment();
+    if (differenceVisibleCommentsAndAllComments > 0 && differenceVisibleCommentsAndAllComments > 5) {
+      newPortionComments = necessaryComments.slice(amountVisibleComments.length, amountVisibleComments.length + AMOUNT_COMMENTS);
+      newPortionComments.forEach(function (it) {
+        fragmentCommentsNew.appendChild(renderComment(it));
+      });
+    } else if (differenceVisibleCommentsAndAllComments > 0 && differenceVisibleCommentsAndAllComments <= 5) {
+      newPortionComments = necessaryComments.slice(amountVisibleComments.length, amountVisibleComments.length + differenceVisibleCommentsAndAllComments);
+      newPortionComments.forEach(function (it) {
+        fragmentCommentsNew.appendChild(renderComment(it));
+      });
+      commentsLoader.classList.add('hidden');
+    }
+
+    bigPictureComments.appendChild(fragmentCommentsNew);
   };
 
   // Функция возвращающая все данные картинки, по которой был произведен клик
@@ -30,20 +57,20 @@
   };
 
   var renderBigPicture = function (selectedPicture) {
-
+    necessaryComments = selectedPicture.comments;
     bigPicture.classList.remove('hidden');
+    commentsLoader.classList.remove('hidden');
     body.classList.add('modal-open');
     document.addEventListener('keydown', escBigPictureClickHandler);
     bigPicture.querySelector('img[alt="Девушка в купальнике"]').src = selectedPicture.url;
     bigPicture.querySelector('.likes-count').textContent = selectedPicture.likes;
     bigPicture.querySelector('.comments-count').textContent = selectedPicture.comments.length;
 
-
-    var bigPictureComments = bigPicture.querySelector('.social__comments');
     bigPictureComments.innerHTML = '';
 
     var fragmentComment = document.createDocumentFragment();
-    for (var j = 0; j < selectedPicture.comments.length; j++) {
+    var commentsCount = (selectedPicture.comments.length > AMOUNT_COMMENTS) ? AMOUNT_COMMENTS : selectedPicture.comments.length;
+    for (var j = 0; j < commentsCount; j++) {
       fragmentComment.appendChild(renderComment(selectedPicture.comments[j]));
     }
 
@@ -51,9 +78,11 @@
 
     bigPicture.querySelector('.social__caption').textContent = selectedPicture.description;
 
-    // Прячем блоки счетчиков комментариев и загрузки новых комментариев
-    bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
-    bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
+    commentsLoader.addEventListener('click', buttonCommentsLoaderClickHandler);
+
+    if (selectedPicture.comments.length < AMOUNT_COMMENTS) {
+      commentsLoader.classList.add('hidden');
+    }
   };
 
 
