@@ -8,14 +8,14 @@
   // Обработчик события слайдера
   var imgUploadPreview = document.querySelector('.img-upload__preview');
   var effectLevelPin = document.querySelector('.effect-level__pin');
-  var effectLevelValue = document.querySelector('.effect-level__value').value;
+  var effectLevelValue = document.querySelector('.effect-level__value');
+
   effectLevelPin.addEventListener('mousedown', function (evt) {
     var startPosition = {
       x: evt.clientX,
       y: evt.clientY
     };
 
-    var dragged = false;
 
     var currentLevelPinValue = '';
 
@@ -25,7 +25,6 @@
         y: startPosition.y - moveEvt.clientY
       };
 
-      dragged = true;
 
       startPosition = {
         x: moveEvt.clientX,
@@ -39,13 +38,14 @@
         var effectLevelDepth = document.querySelector('.effect-level__depth');
         currentLevelPinValue = window.effectsPreview.getProportion(effectLevelPinValue, EFFECT_LEVEL_PIN_MIN, EFFECT_LEVEL_PIN_MAX);
         effectLevelDepth.style.width = currentLevelPinValue + '%';
+        effectLevelValue.setAttribute('value', currentLevelPinValue);
       }
 
       var effectClassName = '';
 
       if (imgUploadPreview.classList.length > 1) {
         effectClassName = imgUploadPreview.classList[1];
-        imgUploadPreview.removeAttribute('style');
+        imgUploadPreview.style.filter = '';
         imgUploadPreview.style.filter = window.effectsPreview.getFilterValue(effectClassName, currentLevelPinValue);
       }
     };
@@ -55,8 +55,8 @@
       var effectClassName = '';
       if (imgUploadPreview.classList.length > 1) {
         effectClassName = imgUploadPreview.classList[1];
-        imgUploadPreview.removeAttribute('style');
-        imgUploadPreview.style.filter = window.effectsPreview.getFilterValue(effectClassName, (dragged) ? currentLevelPinValue : effectLevelValue);
+        imgUploadPreview.style.filter = '';
+        imgUploadPreview.style.filter = window.effectsPreview.getFilterValue(effectClassName, currentLevelPinValue);
       }
 
 

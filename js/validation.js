@@ -105,9 +105,12 @@
     } else {
       getIsValidObject(inputHash);
     }
+
+    return inputHash.validity.valid;
   };
 
   window.validation = {
-    getValidationHash: getValidationHash
+    getValidationHash: getValidationHash,
+    getIsValidObject: getIsValidObject
   };
 })();
