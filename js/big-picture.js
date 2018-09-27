@@ -7,6 +7,7 @@
 
   var bigPicture = document.querySelector('.big-picture');
   var cloneBigPictureComment = bigPicture.querySelector('.social__comment').cloneNode(true);
+  var body = document.body;
 
   // Функция возвращающая комментарий
   var renderComment = function (comment) {
@@ -31,6 +32,7 @@
   var renderBigPicture = function (selectedPicture) {
 
     bigPicture.classList.remove('hidden');
+    body.classList.add('modal-open');
     document.addEventListener('keydown', escBigPictureClickHandler);
     bigPicture.querySelector('img[alt="Девушка в купальнике"]').src = selectedPicture.url;
     bigPicture.querySelector('.likes-count').textContent = selectedPicture.likes;
@@ -65,6 +67,7 @@
 
   // Функция закрывающая popup окно редактирования фото
   var closePopupBigPicture = function () {
+    body.removeAttribute('class');
     bigPicture.classList.add('hidden');
     document.removeEventListener('keydown', escBigPictureClickHandler);
   };
