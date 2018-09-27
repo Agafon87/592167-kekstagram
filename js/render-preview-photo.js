@@ -1,7 +1,25 @@
 'use strict';
 
 (function () {
+  var ARRAY_DESCRIPTIONS_AMOUNT_MIN = 0;
+  var ARRAY_DESCRIPTIONS_AMOUNT_MAX = 5;
+
+  var ARRAY_DESCRIPTIONS = [
+    'Тестим новую камеру!',
+    'Затусили с друзьями на море',
+    'Как же круто тут кормят',
+    'Отдыхаем...',
+    'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
+    'Вот это тачка!'
+  ];
+
   var cbSuccess = function (photos) {
+    for (var j = 0; j < photos.length; j++) {
+      if (!photos[j].dscription) {
+        photos[j].description = ARRAY_DESCRIPTIONS[window.util.getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
+      }
+    }
+
     // Находим элемент в который потом вставим фото других пользователей
     var photoListElement = document.querySelector('.pictures');
 
