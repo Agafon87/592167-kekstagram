@@ -10,7 +10,7 @@
       if (xhr.status === 200) {
         cbSuccess(xhr.response);
       } else {
-        cbError('Что-то пошло не так' + xhr.status + ' ' + xhr.statusText);
+        cbError('Что-то пошло не так ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 

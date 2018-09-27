@@ -33,10 +33,8 @@
     textHashtags.value = '';
     window.validation.getIsValidObject(textHashtags);
     textDescription.value = '';
-    var effectRadio = document.querySelector('input[type="radio"]:checked');
-    if (effectRadio) {
-      effectRadio.checked = false;
-    }
+    var effectRadioDefault = document.querySelector('#effect-none');
+    effectRadioDefault.checked = true;
     document.removeEventListener('keydown', escClickHandler);
     uploadFile.value = '';
     changeForm.classList.add('hidden');
