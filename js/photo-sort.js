@@ -19,7 +19,7 @@
   };
 
 
-  filterPopular.addEventListener('click', function () {
+  var buttonFilterPopularClickHandler = window.debounce(function () {
     // Список фото скаченный с сайта
     actualListPhotos = window.getPhotoOtherPersons();
     clearPreviewPhotos();
@@ -28,7 +28,7 @@
   });
 
 
-  filterNew.addEventListener('click', function () {
+  var buttonFilterNewClickHandler = window.debounce(function () {
     actualListPhotos = window.getPhotoOtherPersons();
 
     // Список случайных фото, в количестве 10 штук
@@ -52,7 +52,7 @@
   });
 
 
-  filterDiscussed.addEventListener('click', function () {
+  var buttonFilterDiscussedClickHandler = window.debounce(function () {
     actualListPhotos = window.getPhotoOtherPersons();
 
     // Список фото отсортированный по убыванию комментариев
@@ -63,6 +63,14 @@
     filterDiscussed.classList.add('img-filters__button--active');
     window.renderPhotos(decreaseSort);
   });
+
+  filterPopular.addEventListener('click', buttonFilterPopularClickHandler);
+
+
+  filterNew.addEventListener('click', buttonFilterNewClickHandler);
+
+
+  filterDiscussed.addEventListener('click', buttonFilterDiscussedClickHandler);
 
 
   window.photoSort = function () {
