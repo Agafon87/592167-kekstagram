@@ -13,20 +13,15 @@
     'Вот это тачка!'
   ];
 
-  var cbSuccess = function (photos) {
-    for (var j = 0; j < photos.length; j++) {
-      if (!photos[j].dscription) {
-        photos[j].description = ARRAY_DESCRIPTIONS[window.util.getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
-      }
-    }
 
+  window.renderPhotos = function (photos) {
     // Находим элемент в который потом вставим фото других пользователей
     var photoListElement = document.querySelector('.pictures');
 
     // Находим template picture и записываем его в переменную
     var pictureOtherPersonsTemplate = document.querySelector('#picture')
-  .content
-  .querySelector('.picture');
+    .content
+    .querySelector('.picture');
 
     var renderPhoto = function (photo) {
       var photoElement = pictureOtherPersonsTemplate.cloneNode(true);
@@ -49,6 +44,16 @@
 
     window.bigPicture();
     window.photoSort();
+  };
+
+  var cbSuccess = function (photos) {
+    for (var j = 0; j < photos.length; j++) {
+      if (!photos[j].dscription) {
+        photos[j].description = ARRAY_DESCRIPTIONS[window.util.getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
+      }
+    }
+
+    window.renderPhotos(photos);
 
     window.getPhotoOtherPersons = function () {
       return photos;

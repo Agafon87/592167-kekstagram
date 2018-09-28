@@ -43,7 +43,9 @@
       commentsLoader.classList.add('hidden');
     }
 
+    var actualCommentsCount = amountVisibleComments.length + fragmentCommentsNew.children.length;
     bigPictureComments.appendChild(fragmentCommentsNew);
+    bigPicture.querySelector('.actual-comments-count').textContent = actualCommentsCount;
   };
 
   // Функция возвращающая все данные картинки, по которой был произведен клик
@@ -65,6 +67,7 @@
     bigPicture.querySelector('img[alt="Девушка в купальнике"]').src = selectedPicture.url;
     bigPicture.querySelector('.likes-count').textContent = selectedPicture.likes;
     bigPicture.querySelector('.comments-count').textContent = selectedPicture.comments.length;
+    bigPicture.querySelector('.actual-comments-count').textContent = (selectedPicture.comments.length > AMOUNT_COMMENTS) ? AMOUNT_COMMENTS : selectedPicture.comments.length;
 
     bigPictureComments.innerHTML = '';
 
