@@ -1,14 +1,27 @@
 'use strict';
 
 (function () {
-  var cbSuccess = function (photos) {
+  var ARRAY_DESCRIPTIONS_AMOUNT_MIN = 0;
+  var ARRAY_DESCRIPTIONS_AMOUNT_MAX = 5;
+
+  var ARRAY_DESCRIPTIONS = [
+    'Тестим новую камеру!',
+    'Затусили с друзьями на море',
+    'Как же круто тут кормят',
+    'Отдыхаем...',
+    'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
+    'Вот это тачка!'
+  ];
+
+
+  window.renderPhotos = function (photos) {
     // Находим элемент в который потом вставим фото других пользователей
     var photoListElement = document.querySelector('.pictures');
 
     // Находим template picture и записываем его в переменную
     var pictureOtherPersonsTemplate = document.querySelector('#picture')
-  .content
-  .querySelector('.picture');
+    .content
+    .querySelector('.picture');
 
     var renderPhoto = function (photo) {
       var photoElement = pictureOtherPersonsTemplate.cloneNode(true);
@@ -24,14 +37,23 @@
 
     for (var i = 0; i < photos.length; i++) {
       var picture = renderPhoto(photos[i]);
-      picture.addEventListener('click', window.util.openPopupBigPicture);
-
       fragment.appendChild(picture);
     }
 
     photoListElement.appendChild(fragment);
 
     window.bigPicture();
+    window.photoSort();
+  };
+
+  var cbSuccess = function (photos) {
+    for (var j = 0; j < photos.length; j++) {
+      if (!photos[j].dscription) {
+        photos[j].description = ARRAY_DESCRIPTIONS[window.util.getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
+      }
+    }
+
+    window.renderPhotos(photos);
 
     window.getPhotoOtherPersons = function () {
       return photos;
