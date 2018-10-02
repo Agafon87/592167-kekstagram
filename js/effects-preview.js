@@ -13,10 +13,14 @@
   var EFFECT_HEAT_MIN = 0;
   var EFFECT_HEAT_MAX = 2;
   var EFFECT_LEVEL_PIN_MAX = 455;
+  var CULCULATION_INFELICITY = 1;
 
   var imgUploadPreview = document.querySelector('.img-upload__preview');
   var sliderEffectLevel = document.querySelector('.img-upload__effect-level.effect-level');
   var scaleControlValue = document.querySelector('.scale__control--value');
+  var effectLevelPin = document.querySelector('.effect-level__pin');
+  var effectLevelDepth = document.querySelector('.effect-level__depth');
+  var effectLevelValue = document.querySelector('.effect-level__value');
 
 
   // Функция сброса эффектов с картинки
@@ -24,18 +28,15 @@
     imgUploadPreview.className = 'img-upload__preview';
     imgUploadPreview.removeAttribute('style');
     sliderEffectLevel.classList.remove('visually-hidden');
-    scaleControlValue.removeAttribute('value');
     scaleControlValue.setAttribute('value', '100%');
   };
 
 
   // Функция возвращающая положение пина слайдера в позиции 100%
   var getSliderPinOneHundredPercent = function () {
-    var effectLevelPin = document.querySelector('.effect-level__pin');
-    var effectLevelDepth = document.querySelector('.effect-level__depth');
-
     effectLevelPin.style.left = EFFECT_LEVEL_PIN_MAX + 'px';
     effectLevelDepth.style.width = window.commonConstants.ONE_HUNDRED_PERCENT + '%';
+    effectLevelValue.setAttribute('value', window.commonConstants.ONE_HUNDRED_PERCENT);
   };
 
 
@@ -120,7 +121,7 @@
         filterValue = 'blur(' + getEffectProportion(effectValue, EFFECT_PHOBOS_MIN, EFFECT_PHOBOS_MAX) + 'px)';
         break;
       case 'effects__preview--heat':
-        filterValue = 'brightness(' + (getEffectProportion(effectValue, EFFECT_HEAT_MIN, EFFECT_HEAT_MAX) + 1) + ')';
+        filterValue = 'brightness(' + (getEffectProportion(effectValue, EFFECT_HEAT_MIN, EFFECT_HEAT_MAX) + CULCULATION_INFELICITY) + ')';
         break;
       default:
         break;

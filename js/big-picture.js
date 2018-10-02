@@ -24,22 +24,26 @@
   };
 
 
+  // Функция возращающая новую порцию комментариев
+  var getNewPortionComments = function (arr) {
+    var fragment = document.createDocumentFragment();
+    arr.forEach(function (it) {
+      fragment.appendChild(renderComment(it));
+    });
+
+    return fragment;
+  };
+
+
   // Функция добавляющая комментарии при нажатии кнопки commentsLoader
   var buttonCommentsLoaderClickHandler = function () {
     var amountVisibleComments = bigPictureComments.querySelectorAll('.social__comment');
     var differenceVisibleCommentsAndAllComments = necessaryComments.length - amountVisibleComments.length;
-    var newPortionComments;
-    var fragmentCommentsNew = document.createDocumentFragment();
-    if (differenceVisibleCommentsAndAllComments > 0 && differenceVisibleCommentsAndAllComments > 5) {
-      newPortionComments = necessaryComments.slice(amountVisibleComments.length, amountVisibleComments.length + AMOUNT_COMMENTS);
-      newPortionComments.forEach(function (it) {
-        fragmentCommentsNew.appendChild(renderComment(it));
-      });
-    } else if (differenceVisibleCommentsAndAllComments > 0 && differenceVisibleCommentsAndAllComments <= 5) {
-      newPortionComments = necessaryComments.slice(amountVisibleComments.length, amountVisibleComments.length + differenceVisibleCommentsAndAllComments);
-      newPortionComments.forEach(function (it) {
-        fragmentCommentsNew.appendChild(renderComment(it));
-      });
+    var fragmentCommentsNew;
+    if (differenceVisibleCommentsAndAllComments > 0 && differenceVisibleCommentsAndAllComments > AMOUNT_COMMENTS) {
+      fragmentCommentsNew = getNewPortionComments(necessaryComments.slice(amountVisibleComments.length, amountVisibleComments.length + AMOUNT_COMMENTS));
+    } else if (differenceVisibleCommentsAndAllComments > 0 && differenceVisibleCommentsAndAllComments <= AMOUNT_COMMENTS) {
+      fragmentCommentsNew = getNewPortionComments(necessaryComments.slice(amountVisibleComments.length, amountVisibleComments.length + differenceVisibleCommentsAndAllComments));
       commentsLoader.classList.add('hidden');
     }
 
@@ -50,7 +54,13 @@
 
   // Функция возвращающая все данные картинки, по которой был произведен клик
   var findPicture = function (evt) {
-    var srcPicture = evt.srcElement.attributes.src.value;
+    var srcPicture;
+    if (evt.target.children.length > 0) {
+      srcPicture = evt.target.children[0].attributes.src.value;
+    } else {
+      srcPicture = evt.srcElement.attributes.src.value;
+    }
+    // srcPicture = evt.target.children[0].attributes.src.value;
     var picture = window.getPhotoOtherPersons().find(function (element) {
       return element.url === srcPicture;
     });

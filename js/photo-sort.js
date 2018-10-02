@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var AMOUNT_PHOTO = 10;
+  var PHOTO_INDEX_MIN = 0;
+  var PHOTO_INDEX_MAX = 14;
+
   var imgFilter = document.querySelector('.img-filters');
   var filterPopular = document.querySelector('#filter-popular');
   var filterNew = document.querySelector('#filter-new');
@@ -31,20 +35,10 @@
   var buttonFilterNewClickHandler = window.debounce(function () {
     actualListPhotos = window.getPhotoOtherPersons();
 
-    // Список случайных фото, в количестве 10 штук
     var randomTenPhotosArray = [];
-    var randomIndexTenPhotosArray = [];
-    for (var i = 1; i <= 10; i++) {
-      for (;;) {
-        var number = window.util.getRandomNumber(0, 24);
-        if (randomIndexTenPhotosArray.indexOf(number) === -1) {
-          randomIndexTenPhotosArray.push(number);
-          break;
-        }
-      }
-    }
-    for (var j = 0; j < randomIndexTenPhotosArray.length; j++) {
-      randomTenPhotosArray.push(actualListPhotos[randomIndexTenPhotosArray[j]]);
+    var startPhotoIndex = window.util.getRandomNumber(PHOTO_INDEX_MIN, PHOTO_INDEX_MAX);
+    for (var j = startPhotoIndex; j < startPhotoIndex + AMOUNT_PHOTO; j++) {
+      randomTenPhotosArray.push(actualListPhotos[j]);
     }
     clearPreviewPhotos();
     filterNew.classList.add('img-filters__button--active');

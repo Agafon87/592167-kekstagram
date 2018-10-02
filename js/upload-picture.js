@@ -8,6 +8,7 @@
   var effectLevelPin = document.querySelector('.effect-level__pin');
   var textHashtags = document.querySelector('.text__hashtags');
   var textDescription = document.querySelector('.text__description');
+  var sliderEffectLevel = document.querySelector('.img-upload__effect-level.effect-level');
 
   // Функция обработчик нажатия клавиши Esc на форме редактирования фото
   var escClickHandler = function (evt) {
@@ -22,14 +23,13 @@
   var openPopupChangeForm = function () {
     changeForm.classList.remove('hidden');
     document.addEventListener('keydown', escClickHandler);
+    sliderEffectLevel.classList.add('visually-hidden');
   };
 
 
   // Функция закрывающая popup окно редактирования фото
   var closePopupChangeForm = function () {
     window.effectsPreview.resetUploadPreviewEffects();
-    effectLevelDepth.style.width = '20%';
-    effectLevelPin.style.left = '99px';
     textHashtags.value = '';
     window.validation.getIsValidObject(textHashtags);
     textDescription.value = '';

@@ -20,17 +20,16 @@
 
   // Функция сравнивающая элементы массива
   var compareArrayElement = function (arr) {
-    var compareResult = true;
     for (var iArr = 0; iArr < arr.length; iArr++) {
       for (var jArr = iArr + 1; jArr < arr.length; jArr++) {
         var currentElement = arr[iArr];
         var nextElement = arr[jArr];
         if (currentElement.toLowerCase() === nextElement.toLowerCase()) {
-          compareResult = false;
+          return false;
         }
       }
     }
-    return compareResult;
+    return true;
   };
 
 
@@ -47,15 +46,15 @@
   // Функция проверяющая что хэш-теги должны разделяться пробелами
   var isTwoHashTagsInOne = function (elem) {
     if (elem.length > 0 && elem.length <= HASH_TAG_MAX_LENGTH) {
-      var symbolLattice = [];
+      var symbolLattice = 0;
       for (var letterIndex = 0; letterIndex < elem.length; letterIndex++) {
+        if (symbolLattice >= 2) {
+          return false;
+        }
         var letter = elem[letterIndex];
         if (letter === '#') {
-          symbolLattice.push(letter);
+          symbolLattice++;
         }
-      }
-      if (symbolLattice.length > 1) {
-        return false;
       }
     }
 
@@ -79,11 +78,12 @@
     }
 
     var tmp = '';
-    errorMessages.forEach(function (it) {
-      if (tmp === '') {
-        tmp = it;
+    for (var i = 0; i < errorMessages.length; i++) {
+      if (errorMessages[i] !== '') {
+        tmp = errorMessages[i];
+        break;
       }
-    });
+    }
 
     if (tmp !== '') {
       getIsNotValidObject(element, tmp);

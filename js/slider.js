@@ -9,26 +9,34 @@
   var imgUploadPreview = document.querySelector('.img-upload__preview');
   var effectLevelPin = document.querySelector('.effect-level__pin');
   var effectLevelValue = document.querySelector('.effect-level__value');
+  var effectClassName = '';
+
+  var checkLengthClassList = function (currentLevelPinValue) {
+    if (imgUploadPreview.classList.length > 1) {
+      effectClassName = imgUploadPreview.classList[1];
+      imgUploadPreview.style.filter = '';
+      imgUploadPreview.style.filter = window.effectsPreview.getFilterValue(effectClassName, currentLevelPinValue);
+    }
+  };
 
   effectLevelPin.addEventListener('mousedown', function (evt) {
     var startPosition = {
       x: evt.clientX,
-      y: evt.clientY
     };
 
-
     var currentLevelPinValue = '';
+    var dragged = false;
+
 
     var mouseMoveHandler = function (moveEvt) {
       var shift = {
         x: startPosition.x - moveEvt.clientX,
-        y: startPosition.y - moveEvt.clientY
       };
+      dragged = true;
 
 
       startPosition = {
         x: moveEvt.clientX,
-        y: moveEvt.clientY
       };
 
       var effectLevelPinValue = effectLevelPin.offsetLeft - shift.x;
@@ -41,25 +49,14 @@
         effectLevelValue.setAttribute('value', currentLevelPinValue);
       }
 
-      var effectClassName = '';
-
-      if (imgUploadPreview.classList.length > 1) {
-        effectClassName = imgUploadPreview.classList[1];
-        imgUploadPreview.style.filter = '';
-        imgUploadPreview.style.filter = window.effectsPreview.getFilterValue(effectClassName, currentLevelPinValue);
-      }
+      checkLengthClassList(currentLevelPinValue);
     };
 
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
-      var effectClassName = '';
-      if (imgUploadPreview.classList.length > 1) {
-        effectClassName = imgUploadPreview.classList[1];
-        imgUploadPreview.style.filter = '';
-        imgUploadPreview.style.filter = window.effectsPreview.getFilterValue(effectClassName, currentLevelPinValue);
+      if (!dragged) {
+        checkLengthClassList(effectLevelValue.value);
       }
-
-
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
     };
