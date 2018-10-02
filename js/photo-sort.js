@@ -35,11 +35,8 @@
   var buttonFilterNewClickHandler = window.debounce(function () {
     actualListPhotos = window.getPhotoOtherPersons();
 
-    var randomTenPhotosArray = [];
     var startPhotoIndex = window.util.getRandomNumber(PHOTO_INDEX_MIN, PHOTO_INDEX_MAX);
-    for (var j = startPhotoIndex; j < startPhotoIndex + AMOUNT_PHOTO; j++) {
-      randomTenPhotosArray.push(actualListPhotos[j]);
-    }
+    var randomTenPhotosArray = actualListPhotos.slice(startPhotoIndex, startPhotoIndex + AMOUNT_PHOTO);
     clearPreviewPhotos();
     filterNew.classList.add('img-filters__button--active');
     window.renderPhotos(randomTenPhotosArray);
