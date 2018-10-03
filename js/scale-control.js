@@ -12,7 +12,6 @@
   var scaleValue;
 
   var renderScaleControlValue = function (value) {
-    scaleControlValue.removeAttribute('value');
     scaleControlValue.setAttribute('value', value + '%');
   };
 
