@@ -52,6 +52,7 @@
   // Функция закрывающая popup окно редактирования фото
   var closePopupChangeForm = function () {
     window.effectsPreview.resetUploadPreviewEffects();
+    window.util.removeNotValidClass(textHashtags);
     textHashtags.value = '';
     textDescription.value = '';
     effectRadioDefault.checked = true;

@@ -15,8 +15,7 @@
 
   var setValidObject = function (valid, errorMessage) {
     if (valid) {
-      inputHash.setCustomValidity('');
-      inputHash.classList.remove('not-valid');
+      window.util.removeNotValidClass(inputHash);
     } else {
       inputHash.setCustomValidity(errorMessage);
       inputHash.classList.add('not-valid');
