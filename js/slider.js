@@ -9,6 +9,7 @@
   var imgUploadPreview = document.querySelector('.img-upload__preview');
   var effectLevelPin = document.querySelector('.effect-level__pin');
   var effectLevelValue = document.querySelector('.effect-level__value');
+  var effectLevelDepth = document.querySelector('.effect-level__depth');
   var effectClassName = '';
 
   var checkLengthClassList = function (currentLevelPinValue) {
@@ -43,7 +44,6 @@
 
       if (effectLevelPinValue >= EFFECT_LEVEL_PIN_MIN && effectLevelPinValue < EFFECT_LEVEL_PIN_MAX) {
         effectLevelPin.style.left = effectLevelPinValue + 'px';
-        var effectLevelDepth = document.querySelector('.effect-level__depth');
         currentLevelPinValue = window.effectsPreview.getProportion(effectLevelPinValue, EFFECT_LEVEL_PIN_MIN, EFFECT_LEVEL_PIN_MAX);
         effectLevelDepth.style.width = currentLevelPinValue + '%';
         effectLevelValue.setAttribute('value', currentLevelPinValue);

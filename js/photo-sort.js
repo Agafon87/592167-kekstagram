@@ -3,7 +3,6 @@
 (function () {
   var AMOUNT_PHOTO = 10;
   var PHOTO_INDEX_MIN = 0;
-  var PHOTO_INDEX_MAX = 14;
 
   var imgFilter = document.querySelector('.img-filters');
   var filterPopular = document.querySelector('#filter-popular');
@@ -35,8 +34,14 @@
   var buttonFilterNewClickHandler = window.debounce(function () {
     actualListPhotos = window.getPhotoOtherPersons();
 
-    var startPhotoIndex = window.util.getRandomNumber(PHOTO_INDEX_MIN, PHOTO_INDEX_MAX);
-    var randomTenPhotosArray = actualListPhotos.slice(startPhotoIndex, startPhotoIndex + AMOUNT_PHOTO);
+    var randomTenPhotosArray = [];
+    while (randomTenPhotosArray.length < AMOUNT_PHOTO) {
+      var picture = actualListPhotos[window.util.getRandomNumber(PHOTO_INDEX_MIN, actualListPhotos.length - 1)];
+      if (randomTenPhotosArray.indexOf(picture) === -1) {
+        randomTenPhotosArray.push(picture);
+      }
+    }
+
     clearPreviewPhotos();
     filterNew.classList.add('img-filters__button--active');
     window.renderPhotos(randomTenPhotosArray);

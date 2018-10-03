@@ -53,14 +53,8 @@
   };
 
   // Функция возвращающая все данные картинки, по которой был произведен клик
-  var findPicture = function (evt) {
-    var srcPicture;
-    if (evt.target.children.length > 0) {
-      srcPicture = evt.target.children[0].attributes.src.value;
-    } else {
-      srcPicture = evt.srcElement.attributes.src.value;
-    }
-    // srcPicture = evt.target.children[0].attributes.src.value;
+  var findPicture = function (current) {
+    var srcPicture = current.children[0].attributes.src.value;
     var picture = window.getPhotoOtherPersons().find(function (element) {
       return element.url === srcPicture;
     });
@@ -120,7 +114,7 @@
     var allPhotos = document.querySelectorAll('.picture');
     for (var indexImg = 0; indexImg < allPhotos.length; indexImg++) {
       allPhotos[indexImg].addEventListener('click', function (evt) {
-        renderBigPicture(findPicture(evt));
+        renderBigPicture(findPicture(evt.currentTarget));
       });
     }
   };
