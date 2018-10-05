@@ -10,6 +10,7 @@
   var cloneBigPictureComment = bigPicture.querySelector('.social__comment').cloneNode(true);
   var bigPictureComments = bigPicture.querySelector('.social__comments');
   var commentsLoader = document.querySelector('.comments-loader');
+  var amountComments = bigPicture.querySelector('.actual-comments-count');
   var body = document.body;
   var necessaryComments;
 
@@ -49,7 +50,7 @@
 
     var actualCommentsCount = amountVisibleComments.length + fragmentCommentsNew.children.length;
     bigPictureComments.appendChild(fragmentCommentsNew);
-    bigPicture.querySelector('.actual-comments-count').textContent = actualCommentsCount;
+    amountComments.textContent = actualCommentsCount;
   };
 
   // Функция возвращающая все данные картинки, по которой был произведен клик
@@ -71,7 +72,7 @@
     bigPicture.querySelector('img[alt="Девушка в купальнике"]').src = selectedPicture.url;
     bigPicture.querySelector('.likes-count').textContent = selectedPicture.likes;
     bigPicture.querySelector('.comments-count').textContent = selectedPicture.comments.length;
-    bigPicture.querySelector('.actual-comments-count').textContent = (selectedPicture.comments.length > AMOUNT_COMMENTS) ? AMOUNT_COMMENTS : selectedPicture.comments.length;
+    amountComments.textContent = (selectedPicture.comments.length > AMOUNT_COMMENTS) ? AMOUNT_COMMENTS : selectedPicture.comments.length;
 
     bigPictureComments.innerHTML = '';
 
@@ -112,11 +113,16 @@
   // Прикручиваем к каждой картинке обработчик события открытия увеличенного изображения
   window.bigPicture = function () {
     var allPhotos = document.querySelectorAll('.picture');
-    for (var indexImg = 0; indexImg < allPhotos.length; indexImg++) {
-      allPhotos[indexImg].addEventListener('click', function (evt) {
+    // for (var indexImg = 0; indexImg < allPhotos.length; indexImg++) {
+    //   allPhotos[indexImg].addEventListener('click', function (evt) {
+    //     renderBigPicture(findPicture(evt.currentTarget));
+    //   });
+    // }
+    allPhotos.forEach(function (it) {
+      it.addEventListener('click', function (evt) {
         renderBigPicture(findPicture(evt.currentTarget));
       });
-    }
+    });
   };
 
 

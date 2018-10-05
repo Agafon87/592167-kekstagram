@@ -3,6 +3,7 @@
 (function () {
   var AMOUNT_PHOTO = 10;
   var PHOTO_INDEX_MIN = 0;
+  var PHOTO_INDEX_MAX = 14;
 
   var imgFilter = document.querySelector('.img-filters');
   var filterPopular = document.querySelector('#filter-popular');
@@ -21,6 +22,26 @@
     });
   };
 
+  var shuffleArray = function (array) {
+    var m = array.length;
+    var t;
+    var i;
+
+    // While there remain elements to shuffle…
+    while (m) {
+
+      // Pick a remaining element…
+      i = Math.floor(Math.random() * m--);
+
+      // And swap it with the current element.
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+
+    return array;
+  };
+
 
   var buttonFilterPopularClickHandler = window.debounce(function () {
     // Список фото скаченный с сайта
@@ -33,15 +54,10 @@
 
   var buttonFilterNewClickHandler = window.debounce(function () {
     actualListPhotos = window.getPhotoOtherPersons();
-
-    var randomTenPhotosArray = [];
-    while (randomTenPhotosArray.length < AMOUNT_PHOTO) {
-      var picture = actualListPhotos[window.util.getRandomNumber(PHOTO_INDEX_MIN, actualListPhotos.length - 1)];
-      if (randomTenPhotosArray.indexOf(picture) === -1) {
-        randomTenPhotosArray.push(picture);
-      }
-    }
-
+    // генерируем случайное число от 0 до 14 и вытаскиваем из оригинального массива 10 фото,
+    // после их между собой перемешиваем
+    var startInsexPhoto = window.util.getRandomNumber(PHOTO_INDEX_MIN, PHOTO_INDEX_MAX);
+    var randomTenPhotosArray = shuffleArray(actualListPhotos.slice(startInsexPhoto, startInsexPhoto + AMOUNT_PHOTO));
     clearPreviewPhotos();
     filterNew.classList.add('img-filters__button--active');
     window.renderPhotos(randomTenPhotosArray);

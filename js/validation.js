@@ -55,16 +55,22 @@
 
   var createErrorString = function (hash, validationFunctions) {
     // берем только первую ошибку
-    for (var i = 0; i < validationFunctions.length; i++) {
-      var error = validationFunctions[i](hash);
-      if (error !== '') {
-        return error;
-      }
-    }
-    return '';
+    // for (var i = 0; i < validationFunctions.length; i++) {
+    //   var error = validationFunctions[i](hash);
+    //   if (error !== '') {
+    //     return error;
+    //   }
+    // }
+    var errorMessage = '';
+    validationFunctions.find(function (it) {
+      errorMessage = it(hash);
+      return errorMessage !== '';
+    });
+    return errorMessage;
   };
 
   var testHashTags = function (hashes) {
+    var errorMessages = '';
 
     var hashValidateFunctions = [
       isHashTagBeginSymbolLattice,
@@ -74,18 +80,22 @@
     ];
 
     // пройдемся до первой ошибки
-    for (var i = 0; i < hashes.length; i++) {
-      var errorMessages = createErrorString(hashes[i], hashValidateFunctions);
-      if (errorMessages !== '') {
-        return errorMessages;
-      }
-    }
+    // for (var i = 0; i < hashes.length; i++) {
+    //   errorMessages = createErrorString(hashes[i], hashValidateFunctions);
+    //   if (errorMessages !== '') {
+    //     return errorMessages;
+    //   }
+    // }
+    hashes.find(function (it) {
+      errorMessages = createErrorString(it, hashValidateFunctions);
+      return errorMessages !== '';
+    });
 
     if (hashes.length > 1 && compareArrayElement(hashes)) {
       return HASH_REPEAT_ERROR;
     }
 
-    return '';
+    return errorMessages;
   };
 
 
