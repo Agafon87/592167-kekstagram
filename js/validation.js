@@ -54,23 +54,24 @@
   };
 
   var createErrorString = function (hash, validationFunctions) {
-    // берем только первую ошибку
-    // for (var i = 0; i < validationFunctions.length; i++) {
-    //   var error = validationFunctions[i](hash);
-    //   if (error !== '') {
-    //     return error;
-    //   }
-    // }
-    var errorMessage = '';
-    validationFunctions.find(function (it) {
-      errorMessage = it(hash);
-      return errorMessage !== '';
+    var errorMessage = [];
+    validationFunctions.forEach(function (it) {
+      var error = it(hash);
+      if (error !== '') {
+        errorMessage.push(error);
+      }
     });
-    return errorMessage;
+
+    // return only one or empty
+    if (errorMessage.length > 0) {
+      return errorMessage[0];
+    }
+
+    return '';
   };
 
   var testHashTags = function (hashes) {
-    var errorMessages = '';
+    var errorMessages = [];
 
     var hashValidateFunctions = [
       isHashTagBeginSymbolLattice,
@@ -79,23 +80,19 @@
       isHashTagMoreThanTwentySymbols
     ];
 
-    // пройдемся до первой ошибки
-    // for (var i = 0; i < hashes.length; i++) {
-    //   errorMessages = createErrorString(hashes[i], hashValidateFunctions);
-    //   if (errorMessages !== '') {
-    //     return errorMessages;
-    //   }
-    // }
-    hashes.find(function (it) {
-      errorMessages = createErrorString(it, hashValidateFunctions);
-      return errorMessages !== '';
+
+    errorMessages = hashes.map(function (it) {
+      return createErrorString(it, hashValidateFunctions);
+    }).filter(function (it) {
+      return it !== '';
     });
 
     if (hashes.length > 1 && compareArrayElement(hashes)) {
-      return HASH_REPEAT_ERROR;
+      errorMessages.push(HASH_REPEAT_ERROR);
     }
 
-    return errorMessages;
+    errorMessages.push('');
+    return errorMessages[0];
   };
 
 

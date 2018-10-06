@@ -1,9 +1,8 @@
 'use strict';
 
 (function () {
-  var AMOUNT_PHOTO = 10;
   var PHOTO_INDEX_MIN = 0;
-  var PHOTO_INDEX_MAX = 14;
+  var PHOTO_INDEX_MAX = 10;
 
   var imgFilter = document.querySelector('.img-filters');
   var filterPopular = document.querySelector('#filter-popular');
@@ -54,10 +53,7 @@
 
   var buttonFilterNewClickHandler = window.debounce(function () {
     actualListPhotos = window.getPhotoOtherPersons();
-    // генерируем случайное число от 0 до 14 и вытаскиваем из оригинального массива 10 фото,
-    // после их между собой перемешиваем
-    var startInsexPhoto = window.util.getRandomNumber(PHOTO_INDEX_MIN, PHOTO_INDEX_MAX);
-    var randomTenPhotosArray = shuffleArray(actualListPhotos.slice(startInsexPhoto, startInsexPhoto + AMOUNT_PHOTO));
+    var randomTenPhotosArray = shuffleArray(actualListPhotos.slice()).slice(PHOTO_INDEX_MIN, PHOTO_INDEX_MAX);
     clearPreviewPhotos();
     filterNew.classList.add('img-filters__button--active');
     window.renderPhotos(randomTenPhotosArray);
