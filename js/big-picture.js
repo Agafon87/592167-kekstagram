@@ -11,7 +11,6 @@
   var bigPictureComments = bigPicture.querySelector('.social__comments');
   var commentsLoader = document.querySelector('.comments-loader');
   var amountComments = bigPicture.querySelector('.actual-comments-count');
-  var amountVisibleComments = bigPictureComments.querySelectorAll('.social__comment');
   var body = document.body;
   var necessaryComments;
 
@@ -39,6 +38,7 @@
 
   // Функция добавляющая комментарии при нажатии кнопки commentsLoader
   var buttonCommentsLoaderClickHandler = function () {
+    var amountVisibleComments = bigPictureComments.querySelectorAll('.social__comment');
     var differenceVisibleCommentsAndAllComments = necessaryComments.length - amountVisibleComments.length;
     var fragmentCommentsNew;
     if (differenceVisibleCommentsAndAllComments > 0 && differenceVisibleCommentsAndAllComments > AMOUNT_COMMENTS) {
