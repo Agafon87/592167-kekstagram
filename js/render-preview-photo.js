@@ -35,10 +35,9 @@
 
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < photos.length; i++) {
-      var picture = renderPhoto(photos[i]);
-      fragment.appendChild(picture);
-    }
+    photos.forEach(function (it) {
+      fragment.appendChild(renderPhoto(it));
+    });
 
     photoListElement.appendChild(fragment);
 
@@ -47,11 +46,11 @@
   };
 
   var cbSuccess = function (photos) {
-    for (var j = 0; j < photos.length; j++) {
-      if (!photos[j].dscription) {
-        photos[j].description = ARRAY_DESCRIPTIONS[window.util.getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
+    photos.forEach(function (it) {
+      if (!it.description) {
+        it.description = ARRAY_DESCRIPTIONS[window.util.getRandomNumber(ARRAY_DESCRIPTIONS_AMOUNT_MIN, ARRAY_DESCRIPTIONS_AMOUNT_MAX)];
       }
-    }
+    });
 
     window.renderPhotos(photos);
 

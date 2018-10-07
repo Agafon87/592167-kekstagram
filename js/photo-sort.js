@@ -64,7 +64,7 @@
     actualListPhotos = window.getPhotoOtherPersons();
 
     // Список фото отсортированный по убыванию комментариев
-    var decreaseSort = actualListPhotos.slice(0).sort(function (a, b) {
+    var decreaseSort = actualListPhotos.slice().sort(function (a, b) {
       return b.comments.length - a.comments.length;
     });
     clearPreviewPhotos();
